@@ -6,7 +6,7 @@ from load_datasets import *
 
 
 def visualize_images(images, label): 
-    for i in range(10, 19):
+    for i in range(10):
         plt.subplot(330 + 1 + i, title = label)
         plt.imshow(images[i], cmap = plt.get_cmap('gray'))
 

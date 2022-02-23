@@ -16,10 +16,6 @@ TESTING_DATA_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent,
 EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-balanced-mapping.txt").as_posix()
 
-# File path for the label mappings
-UPDATED_EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/updated-emnist-balanced-mapping.txt").as_posix()
-
 
 PIXEL_SIDE_LENGTH = 28
                         
