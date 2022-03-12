@@ -1,16 +1,46 @@
 # Author: Matt Williams
-# Version: 2/21/2022
+# Version: 3/12/2022
 
 
 from pathlib import PurePath, Path
 
-# File path for the training data
-TRAINING_DATA_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+# File path for the complete training data in csv form
+# Not to be used outside of edit_dataset.py
+TRAINING_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-balanced-train.csv").as_posix()
 
-# File path for the test data
-TESTING_DATA_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+# File path for the complete test data in csv form
+# Not to be used outside of edit_dataset.py
+TESTING_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-balanced-test.csv").as_posix()
+
+
+# File path for the letters training data in json form
+TRAINING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-train-letters.json").as_posix()
+
+# File path for the numbers training data in json form
+TRAINING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-train-numbers.json").as_posix()
+
+
+# File path for the letters test data in json form
+TESTING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-test-letters.json").as_posix()
+
+# File path for the numbers test data in json form
+TESTING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-test-numbers.json").as_posix()
+
+
+# File path for the letters validation data in json form
+VALIDATE_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-validation-letters.json").as_posix()
+
+# File path for the letters validation data in json form
+VALIDATE_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-validation-numbers.json").as_posix()
+
                         
 # File path for the label mappings
 EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
