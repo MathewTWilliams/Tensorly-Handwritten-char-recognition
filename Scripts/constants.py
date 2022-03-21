@@ -17,29 +17,29 @@ TESTING_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.parent
 
 # File path for the letters training data in json form
 TRAINING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-train-letters.json").as_posix()
+                        "Dataset/emnist-train-letters.csv").as_posix()
 
 # File path for the numbers training data in json form
 TRAINING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-train-numbers.json").as_posix()
+                        "Dataset/emnist-train-numbers.csv").as_posix()
 
 
 # File path for the letters test data in json form
 TESTING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-test-letters.json").as_posix()
+                        "Dataset/emnist-test-letters.csv").as_posix()
 
 # File path for the numbers test data in json form
 TESTING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-test-numbers.json").as_posix()
+                        "Dataset/emnist-test-numbers.csv").as_posix()
 
 
 # File path for the letters validation data in json form
 VALIDATE_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-validation-letters.json").as_posix()
+                        "Dataset/emnist-validation-letters.csv").as_posix()
 
 # File path for the letters validation data in json form
 VALIDATE_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
-                        "Dataset/emnist-validation-numbers.json").as_posix()
+                        "Dataset/emnist-validation-numbers.csv").as_posix()
 
                         
 # File path for the label mappings
@@ -48,4 +48,6 @@ EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent,
 
 
 PIXEL_SIDE_LENGTH = 28
+
+LABEL_COL = 0
                         

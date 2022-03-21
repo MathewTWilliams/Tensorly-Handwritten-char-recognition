@@ -1,22 +1,21 @@
 # Author: Matt Williams
-# Version: 2/21/2022
+# Version: 3/12/2022
 
 from matplotlib import pyplot as plt
-from load_datasets import *
+from save_load_dataset import load_validation_number_dataset
+
 
 
 def visualize_images(images, label): 
-    for i in range(10):
-        plt.subplot(330 + 1 + i, title = label)
-        plt.imshow(images[i], cmap = plt.get_cmap('gray'))
+    for i in range(9):
+        plt.subplot(330 + 1 + i, label = label)
+        plt.imshow(images[i+3000], cmap = plt.get_cmap('gray'), )
 
     plt.show()
 
 
 
 if __name__ == "__main__": 
-    dataset = load_testing_dataset()
-
-    for label, images in dataset.items(): 
-        visualize_images(images, label)
+    images, labels = load_validation_number_dataset(num_color_channels=1)
+    visualize_images(images, "test")
         
