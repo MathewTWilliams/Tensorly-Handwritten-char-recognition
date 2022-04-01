@@ -1,5 +1,5 @@
 # Author: Matt Williams
-# Version: 3/12/2022
+# Version: 3/27/2022
 
 
 from pathlib import PurePath, Path
@@ -42,12 +42,32 @@ VALIDATE_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.p
                         "Dataset/emnist-validation-numbers.csv").as_posix()
 
                         
-# File path for the label mappings
+# File path for the label mappings (original)
 EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-balanced-mapping.txt").as_posix()
 
+# File path for the updated letter mappings
+UPDATED_LET_MAPPINGS_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent,
+                                "Dataset/updated-letter-mappings.txt").as_posix()
+
+
+TF_RESULTS_FOLDER = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Results/Tensorflow/")
+
+PYT_RESULTS_FOLDER = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Results/Py-Torch/")
 
 PIXEL_SIDE_LENGTH = 28
 
 LABEL_COL = 0
-                        
+
+PYT_INPUT_SIZE = (1, PIXEL_SIDE_LENGTH, PIXEL_SIDE_LENGTH)
+
+BATCH_SIZE = 32
+
+N_EPOCHS = 20
+
+N_NUM_CLASSES = 10
+N_LET_CLASSES = 37
+
+VALIDATE = True

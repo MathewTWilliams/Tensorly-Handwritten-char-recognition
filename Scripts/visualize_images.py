@@ -1,21 +1,41 @@
 # Author: Matt Williams
-# Version: 3/12/2022
+# Version: 3/27/2022
 
 from matplotlib import pyplot as plt
-from save_load_dataset import load_validation_number_dataset
+from save_load_dataset import *
+import math
+from utils import edit_labels
 
 
+def visualize_images(images, labels, num_classes, class_interval): 
+    sqrt = math.sqrt(num_classes)
+    n_cols = math.ceil(sqrt)
+    n_rows = math.floor(sqrt)
 
-def visualize_images(images, label): 
-    for i in range(9):
-        plt.subplot(330 + 1 + i, label = label)
-        plt.imshow(images[i+3000], cmap = plt.get_cmap('gray'), )
 
+    for i in range(num_classes):
+        index = i*class_interval
+        plt.subplot(n_rows, n_cols, 1 + i)
+        plt.title(labels[index])
+        plt.imshow(images[index], cmap = plt.get_cmap('gray'),)
+
+    plt.tight_layout()
     plt.show()
 
 
-
 if __name__ == "__main__": 
+
     images, labels = load_validation_number_dataset(num_color_channels=1)
-    visualize_images(images, "test")
+    num_classes = len(set(labels))
+    class_interval = int(len(labels) / num_classes)
+    visualize_images(images, labels, num_classes, class_interval)
+
+    images, labels = load_validation_letter_dataset(num_color_channels=1)
+    labels = edit_labels(labels, False)
+    num_classes = len(set(labels))
+    class_interval = int(len(labels) / num_classes)
+    visualize_images(images, labels, num_classes, class_interval)
+    
+
+
         
