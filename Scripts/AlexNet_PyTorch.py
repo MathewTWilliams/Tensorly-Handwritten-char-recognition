@@ -53,8 +53,8 @@ class AlexNet(Py_Torch_Base):
             conv_3,
             conv_4, 
             conv_5,
-            MaxPool2d(kernel_size=3, stride = 2),
             ReLU(inplace = True),
+            MaxPool2d(kernel_size=3, stride = 2),
             Dropout(p = 0.3)
         )
 

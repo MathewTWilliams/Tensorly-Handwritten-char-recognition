@@ -14,8 +14,8 @@ from tensorflow.keras.utils import to_categorical
 def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, normalize = True, num_color_channels = 1):
 
     training_hist = None
-    train_x, train_y = train_set_func(normalize=True, num_color_channels=1)
-    valid_x, valid_y = valid_set_func(normalize=True, num_color_channels=1)
+    train_x, train_y = train_set_func(normalize=normalize, num_color_channels=num_color_channels)
+    valid_x, valid_y = valid_set_func(normalize=normalize, num_color_channels=num_color_channels)
 
     one_hot_train_y = to_categorical(train_y)
     one_hot_valid_y = to_categorical(valid_y)
@@ -29,7 +29,6 @@ def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, n
 
     one_hot_predictions = model.predict(valid_x, batch_size = BATCH_SIZE)
     predictions = np.argmax(one_hot_predictions, axis = -1)
-
     class_report = classification_report(valid_y, predictions, output_dict=True)
 
     model_summary = []
