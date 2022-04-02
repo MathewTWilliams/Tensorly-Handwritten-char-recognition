@@ -187,3 +187,10 @@ def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_c
         results_dict['Valid Loss per Epoch'] = valid_losses
 
     save_cnn_results(results_dict, PYT_RESULTS_FOLDER)
+
+def initialize_weights_bias(layer): 
+    
+    if layer.weight is not None: 
+        torch.nn.init.xavier_uniform_(layer.weight)
+    if layer.bias is not None: 
+        torch.nn.init.zeros_(layer.bias)
