@@ -45,15 +45,20 @@ def _run_letters():
             "Lenet-5", "Letters")
 
     
-    
-
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
             "Lenet-5", "Numbers")
+
+def _run_balanced():
+    model = _define_model(N_BAL_CLASSES)
+    run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
+            "Lenet-5", "Balanced")
+    
     
 
 if __name__ == "__main__":
 
-    _run_letters()
     #_run_numbers()
+    #_run_letters()
+    _run_balanced()

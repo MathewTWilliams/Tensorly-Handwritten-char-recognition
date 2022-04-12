@@ -14,6 +14,8 @@ TRAINING_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.paren
 TESTING_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-balanced-test.csv").as_posix()
 
+VALIDATION_DATA_PATH_CSV = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
+                        "Dataset/emnist-balanced-valid.csv").as_posix()
 
 # File path for the letters training data in json form
 TRAINING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
@@ -23,7 +25,6 @@ TRAINING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.p
 TRAINING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-train-numbers.csv").as_posix()
 
-
 # File path for the letters test data in json form
 TESTING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-test-letters.csv").as_posix()
@@ -31,7 +32,6 @@ TESTING_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.pa
 # File path for the numbers test data in json form
 TESTING_DATA_PATH_NUMBERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Dataset/emnist-test-numbers.csv").as_posix()
-
 
 # File path for the letters validation data in json form
 VALIDATE_DATA_PATH_LETTERS = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
@@ -69,5 +69,6 @@ N_EPOCHS = 20
 
 N_NUM_CLASSES = 10
 N_LET_CLASSES = 37
+N_BAL_CLASSES = N_NUM_CLASSES + N_LET_CLASSES
 
 VALIDATE = True

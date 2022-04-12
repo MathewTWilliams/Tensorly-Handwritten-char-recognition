@@ -67,8 +67,10 @@ def _update_letter_labels(letters_df, updated_letter_mappings):
 
 if __name__ == "__main__": 
 
+    # make updated letter mapping dictionary
     updated_letter_mappings = _make_updated_letter_mappings()
 
+    # load in dataset
     train_set = pd.read_csv(TRAINING_DATA_PATH_CSV, header = None)
     test_set = pd.read_csv(TESTING_DATA_PATH_CSV, header = None)
 
@@ -76,19 +78,29 @@ if __name__ == "__main__":
     test_groupby = test_set.groupby(train_set.columns[0])
     valid_count = int(test_groupby.size().mean())
 
+    # split test data set 
     test_numbers, test_letters = _split_data_set(test_set)
     test_letters = _update_letter_labels(test_letters,updated_letter_mappings)
     test_numbers.to_csv(TESTING_DATA_PATH_NUMBERS, header=False, index=False)
     test_letters.to_csv(TESTING_DATA_PATH_LETTERS, header=False, index=False)
 
+    # split train data set
     train_numbers, train_letters = _split_data_set(train_set)
     
+    # split numbers into train and valid data sets
     train_numbers, valid_numbers = _train_valid_split(train_numbers, valid_count)
     train_numbers.to_csv(TRAINING_DATA_PATH_NUMBERS, header=False, index = False)
     valid_numbers.to_csv(VALIDATE_DATA_PATH_NUMBERS, header=False, index = False)
 
+    # split letters into train and valid data sets
     train_letters, valid_letters = _train_valid_split(train_letters, valid_count)
+
+    # Make balanced validation set before updating letter labels
+    pd.concat([valid_numbers, valid_letters]).to_csv(VALIDATION_DATA_PATH_CSV, header=False, index = False)
+
     train_letters = _update_letter_labels(train_letters,updated_letter_mappings)
     valid_letters = _update_letter_labels(valid_letters,updated_letter_mappings)
     train_letters.to_csv(TRAINING_DATA_PATH_LETTERS, header=False, index = False)
     valid_letters.to_csv(VALIDATE_DATA_PATH_LETTERS, header=False, index = False)
+
+    

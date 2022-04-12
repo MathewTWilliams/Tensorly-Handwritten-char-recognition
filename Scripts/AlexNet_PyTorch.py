@@ -19,11 +19,10 @@ class AlexNet(Py_Torch_Base):
         conv_1 = Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding = 0, stride = 1) 
         initialize_weights_bias(conv_1)
 
-        conv_2 = Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding = 2, stride = 1)
+        conv_2 = Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding = 2, stride = 1)
         initialize_weights_bias(conv_2)
 
-        conv_3 = Conv2d(in_channels=64, out_channels=128, kernel_size=5, padding = 1, stride = 1)
-        torch.nn.init.xavier_uniform_(conv_3.weight)
+        conv_3 = Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding = 1, stride = 1)
         initialize_weights_bias(conv_3)
 
         conv_4 = Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding = 1, stride = 1)
@@ -40,21 +39,20 @@ class AlexNet(Py_Torch_Base):
             conv_2, # 12 x 12 x 64
             ReLU(inplace = True),
             MaxPool2d(kernel_size=2, stride=2), # 6 x 6 x 64
-            conv_3,#6 x 6 x 128
+            conv_3, # 6 x 6 x 128
             ReLU(inplace=True), 
-            conv_4,#6 x 6 x 128
+            conv_4, # 6 x 6 x 128
             ReLU(inplace=True), 
             conv_5, # 6 x 6 x 64
             ReLU(inplace=True), 
-            MaxPool2d(kernel_size=2, stride = 2), # 3 x 3 x 64
+            MaxPool2d(kernel_size=2, stride = 2), # 3 x 3 x 64  
             Dropout(p = 0.3),
         )
 
         return cnn_layers
 
     def _define_linear_layers(self):
-        #TODO need to edit linear layers to match scaled CNN related layers
-        linear_1 = Linear(256, out_features=256)
+        linear_1 = Linear(576, out_features=256)
         initialize_weights_bias(linear_1)
 
 

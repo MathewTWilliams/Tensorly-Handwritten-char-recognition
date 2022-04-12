@@ -22,44 +22,44 @@ def _define_model(num_classes):
     model = Sequential()
     
     #Convolution Layers
-    model.add(Conv2D(filters = 16, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+    model.add(Conv2D(filters = 32, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
                     kernel_regularizer = l2(5e-4), input_shape = (28,28,1), padding = "same", strides = 1))
 
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 32, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (14,14,16), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+                    kernel_regularizer = l2(5e-4), input_shape = (14,14,32), padding = "same", strides = 1))
 
     model.add(ZeroPadding2D(padding=(1,1)))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 32, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (8,8,32), padding = "same", strides = 1))
-
-    model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (8,8,32), padding = "same", strides = 1))
-
-    model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (4,4,64), padding = "same", strides = 1))
-
+    model.add(Conv2D(filters = 128, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+                    kernel_regularizer = l2(5e-4), input_shape = (8,8,64), padding = "same", strides = 1))
 
     model.add(Conv2D(filters = 128, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (4,4,64), padding = "same", strides = 1))
-    
+                    kernel_regularizer = l2(5e-4), input_shape = (8,8,128), padding = "same", strides = 1))
+
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 128, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (2,2,128), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 256, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+                    kernel_regularizer = l2(5e-4), input_shape = (4,4,128), padding = "same", strides = 1))
+
 
     model.add(Conv2D(filters = 256, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
-                    kernel_regularizer = l2(5e-4), input_shape = (2,2,128), padding = "same", strides = 1))
+                    kernel_regularizer = l2(5e-4), input_shape = (4,4,256), padding = "same", strides = 1))
+    
+    model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
+    model.add(Conv2D(filters = 256, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+                    kernel_regularizer = l2(5e-4), input_shape = (2,2,256), padding = "same", strides = 1))
+
+    model.add(Conv2D(filters = 256, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', \
+                    kernel_regularizer = l2(5e-4), input_shape = (2,2,256), padding = "same", strides = 1))
 
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
 
 
     # Linear Layers
     model.add(Flatten())
-    model.add(Dense(units = 64, activation = "relu", kernel_initializer = "glorot_uniform", kernel_regularizer = l2(5e-4)))
+    model.add(Dense(units = 128, activation = "relu", kernel_initializer = "glorot_uniform", kernel_regularizer = l2(5e-4)))
     model.add(Dropout(rate = 0.3))
-    model.add(Dense(units = 32, activation = "relu", kernel_initializer = "glorot_uniform", kernel_regularizer = l2(5e-4)))
+    model.add(Dense(units = 64, activation = "relu", kernel_initializer = "glorot_uniform", kernel_regularizer = l2(5e-4)))
     model.add(Dropout(rate = 0.3))
     model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_uniform", kernel_regularizer = l2(5e-4)))
 
@@ -80,8 +80,16 @@ def _run_numbers():
             "VGG-11", "Numbers")
     
 
+def _run_balanced():
+    model = _define_model(N_BAL_CLASSES)
+    run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
+            "VGG-11", "Balanced")
+    
+
+
 if __name__ == "__main__":
 
     #_run_letters()
-    _run_numbers()
+    #_run_numbers()
+    _run_balanced()
 

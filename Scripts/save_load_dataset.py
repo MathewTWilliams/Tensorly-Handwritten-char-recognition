@@ -7,7 +7,7 @@ from constants import *
 import os
 import pandas as pd
 
-def _load_csv(path, normalize, num_color_channels, torch, numbers): 
+def _load_csv(path, normalize, num_color_channels, torch): 
     if not os.path.exists(path):
         return None
 
@@ -48,27 +48,40 @@ def read_mappings(path):
     return mappings
 
 
+def load_training_balanced_dataset(normalize = False, num_color_channels = 0, torch = False): 
+    return _load_csv(TRAINING_DATA_PATH_CSV, normalize, num_color_channels, torch)
+
 def load_training_letter_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(TRAINING_DATA_PATH_LETTERS, normalize, num_color_channels, torch, False)
+    return _load_csv(TRAINING_DATA_PATH_LETTERS, normalize, num_color_channels, torch)
 
 def load_training_number_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(TRAINING_DATA_PATH_NUMBERS, normalize, num_color_channels, torch, True)
+    return _load_csv(TRAINING_DATA_PATH_NUMBERS, normalize, num_color_channels, torch)
+
+
+
+def load_testing_balanced_dataset(normalize = False, num_color_channels = 0, torch = False): 
+    return _load_csv(TESTING_DATA_PATH_CSV, normalize, num_color_channels, torch)
 
 def load_testing_letter_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(TESTING_DATA_PATH_LETTERS, normalize, num_color_channels, torch, False)
+    return _load_csv(TESTING_DATA_PATH_LETTERS, normalize, num_color_channels, torch)
 
 def load_testing_number_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(TESTING_DATA_PATH_NUMBERS, normalize, num_color_channels, torch, True)
+    return _load_csv(TESTING_DATA_PATH_NUMBERS, normalize, num_color_channels, torch)
+
+
+
+def load_validation_balanced_dataset(normalize = False, num_color_channels = 0, torch = False): 
+    return _load_csv(VALIDATION_DATA_PATH_CSV, normalize, num_color_channels, torch)
 
 def load_validation_letter_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(VALIDATE_DATA_PATH_LETTERS, normalize, num_color_channels, torch, False)
+    return _load_csv(VALIDATE_DATA_PATH_LETTERS, normalize, num_color_channels, torch)
 
 def load_validation_number_dataset(normalize = False, num_color_channels = 0, torch = False): 
-    return _load_csv(VALIDATE_DATA_PATH_NUMBERS, normalize, num_color_channels, torch, True)
+    return _load_csv(VALIDATE_DATA_PATH_NUMBERS, normalize, num_color_channels, torch)
 
 # just for testing purposes
 if __name__ == "__main__":
-    images, labels = load_testing_number_dataset(normalize=True, num_color_channels=1)
+    images, labels = load_validation_balanced_dataset(normalize=True, num_color_channels=1)
     print(len(images))
     print(len(labels))
     

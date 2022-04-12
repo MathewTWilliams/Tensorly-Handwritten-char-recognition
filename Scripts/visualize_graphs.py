@@ -2,22 +2,21 @@ import matplotlib.pyplot as plt
 from constants import PYT_RESULTS_FOLDER, TF_RESULTS_FOLDER
 from save_results import load_cnn_results
 
+train_loss = "Train Loss per Epoch"
+class_report = "Classification Report"
+train_time = "Training Time"
+valid_loss = "Valid Loss per Epoch"
+accuracy = "accuracy"
+weighted_avg = "weighted avg"
+precision = "precision"
+recall = "recall"
+f1_score = "f1-score"
+
+
+
+
+
 if __name__ == "__main__": 
-    
-    n_epochs = 20
-    #keys
-
-    train_loss = "Train Loss per Epoch"
-    class_report = "Classification Report"
-    train_time = "Training Time"
-    valid_loss = "Valid Loss per Epoch"
-
-    accuracy = "accuracy"
-    weighted_avg = "weighted avg"
-    precision = "precision"
-    recall = "recall"
-
-    f1_score = "f1-score"
 
 
 
