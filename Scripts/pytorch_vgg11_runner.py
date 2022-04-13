@@ -23,7 +23,7 @@ def _run_numbers():
     summary(vgg_11_numbers, (1, 28, 28), batch_size=32)
 
     run_model(vgg_11_numbers,valid_set_func=load_validation_number_dataset, name="VGG-11 Pytorch", dataset_name="Numbers")
-
+    del vgg_11_numbers
 
 def _run_letters():
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
@@ -37,7 +37,7 @@ def _run_letters():
 
     summary(vgg_11_letters, (1, 28, 28), batch_size=32)
     run_model(vgg_11_letters,valid_set_func=load_validation_letter_dataset, name="VGG-11 Pytorch", dataset_name="Letters")
-
+    del vgg_11_letters
 
 def _run_balanced():
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
@@ -51,6 +51,13 @@ def _run_balanced():
 
     summary(vgg_11_balanced, (1, 28, 28), batch_size=32)
     run_model(vgg_11_balanced,valid_set_func=load_validation_balanced_dataset, name="VGG-11 Pytorch", dataset_name="Balanced")
+    del vgg_11_balanced
+
+
+def run_vgg_11_pytorch(): 
+    _run_numbers()
+    _run_letters()
+    _run_balanced()
 
 
 if __name__ == "__main__": 

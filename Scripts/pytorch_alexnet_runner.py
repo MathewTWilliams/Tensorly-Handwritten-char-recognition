@@ -22,7 +22,7 @@ def _run_numbers():
 
     summary(alex_numbers, input_size=(1, 28, 28), batch_size=32, device="cuda")
     run_model(alex_numbers,valid_set_func=load_validation_number_dataset, name="AlexNet Pytorch", dataset_name="Numbers")
-
+    del alex_numbers
 
 def _run_letters():
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
@@ -36,7 +36,7 @@ def _run_letters():
 
     summary(alex_letters, input_size=(1, 28, 28), batch_size=32, device="cuda")
     run_model(alex_letters,valid_set_func=load_validation_letter_dataset, name="AlexNet Pytorch", dataset_name="Letters")
-
+    del alex_letters
 
 def _run_balanced():
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
@@ -50,6 +50,13 @@ def _run_balanced():
 
     summary(alex_balanced, input_size=(1, 28, 28), batch_size=32, device="cuda")
     run_model(alex_balanced,valid_set_func=load_validation_balanced_dataset, name="AlexNet Pytorch", dataset_name="Balanced")
+    del alex_balanced
+
+
+def run_alexnet_pytorch():
+    _run_numbers() 
+    _run_letters()
+    _run_balanced()
 
 
 if __name__ == "__main__": 

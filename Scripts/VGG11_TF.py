@@ -72,18 +72,25 @@ def _run_letters():
     model = _define_model(N_LET_CLASSES)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
             "VGG-11", "Letters")
-
+    del model
 
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
             "VGG-11", "Numbers")
-    
+    del model
 
 def _run_balanced():
     model = _define_model(N_BAL_CLASSES)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
             "VGG-11", "Balanced")
+    del model
+
+
+def run_vgg_11_tf_models(): 
+    _run_numbers()
+    _run_letters()
+    _run_balanced()
     
 
 
