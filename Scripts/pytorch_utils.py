@@ -4,9 +4,11 @@
 # - https://www.analyticsvidhya.com/blog/2019/10/building-image-classification-models-cnn-pytorch/
 # - https://medium.com/@nutanbhogendrasharma/pytorch-convolutional-neural-network-with-mnist-dataset-4e8a4265e118
 # - https://www.geeksforgeeks.org/training-neural-networks-with-validation-using-pytorch/
+# - https://github.com/JeanKossaifi/tensorly-notebooks/blob/master/05_pytorch_backend/cnn_acceleration_tensorly_and_pytorch.ipynb
+# - https://github.com/jacobgil/pytorch-tensor-decompositions
 
 import torch
-from torch.nn import Module
+from torch.nn import Module, Sequential
 from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
 from constants import *
@@ -14,6 +16,7 @@ from datetime import datetime
 from sklearn.metrics import classification_report
 import numpy as np
 from save_results import save_cnn_results
+from pytorch_decompositions import * 
 
 class Py_Torch_Base(Module):
 
@@ -191,6 +194,36 @@ def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_c
 def initialize_weights_bias(layer): 
     
     if layer.weight is not None: 
-        torch.nn.init.xavier_uniform_(layer.weight)
+        torch.nn.init.xavier_normal_(layer.weight)
     if layer.bias is not None: 
         torch.nn.init.zeros_(layer.bias)
+
+def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP): 
+    
+    decomposed_cnn_layers = Sequential()
+    found_first_cnn = False
+    for i, module in enumerate(cnn_layers.modules()):
+        #Skip first module in the list as it gives overview of sub-modules 
+        if i == 0: 
+            continue
+        
+        #Skip first Convolution layer as it only has 1 input channel
+        if type(module) is torch.nn.Conv2d and not found_first_cnn:
+            decomposed_cnn_layers.add_module(module._get_name(), module)
+            found_first_cnn = True
+            continue 
+        
+        elif type(module) is not torch.nn.Conv2d: 
+            decomposed_cnn_layers.add_module(module._get_name(), module)
+
+        if decomposition == Decomposition.CP: 
+            rank = max(module.weight.data.numpy().shape) // 3 
+            decomposed_layer = cp_decomposition_cnn_layer(module, rank = rank)
+            decomposed_cnn_layers.add_module("Decomposed_cnn_" + (i+1), decomposed_layer)
+
+        elif decomposition == Decomposition.Tucker:
+            ranks =  [module.weight.size(0)//2, module.weight.size(1)//2]
+            decomposed_layer = tucker_decomposition_cnn_layer(module, ranks = ranks)
+            decomposed_cnn_layers.add_module("Decomposed_cnn_"+(i+1), decomposed_layer)
+
+        return decomposed_cnn_layers

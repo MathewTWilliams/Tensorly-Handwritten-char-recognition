@@ -3,6 +3,7 @@
 
 
 from pathlib import PurePath, Path
+from enum import Enum
 
 # File path for the complete training data in csv form
 # Not to be used outside of edit_dataset.py
@@ -72,3 +73,9 @@ N_LET_CLASSES = 37
 N_BAL_CLASSES = N_NUM_CLASSES + N_LET_CLASSES
 
 VALIDATE = True
+
+
+class Decomposition(Enum): 
+    CP = 0
+    Tucker = 1
+

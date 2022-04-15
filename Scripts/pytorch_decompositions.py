@@ -4,7 +4,7 @@
 # - https://github.com/JeanKossaifi/tensorly-notebooks/blob/master/05_pytorch_backend/cnn_acceleration_tensorly_and_pytorch.ipynb
 
 import tensorly as tl
-from tensorly.decomposition import parafac,tucker
+from tensorly.decomposition import parafac, partial_tucker
 from torch.nn import Conv2d, Sequential
 import torch
 
@@ -57,5 +57,39 @@ def cp_decomposition_cnn_layer(layer, rank):
 
     new_layers = [pointwise_s_to_r_layer, depthwise_vertical_layer, \
                     depthwise_horizontal_layer, pointwise_r_to_t_layer]
+
+    return Sequential(*new_layers)
+
+def tucker_decomposition_cnn_layer(layer, ranks):
+
+    tl.backend("pytorch")
+    core, [last,first] = \
+        partial_tucker(layer.weight.data, modes = [0,1], ranks = ranks, init='svd')
+
+    # Pointwise convolution that reduces the channels
+    first_layer = Conv2d(in_channels = first.shape[0], \
+            out_channels=first.shape[1], kernel_size=1, 
+            stride = 1, padding = 0, dilation=layer.dilation, bias = False)
+
+    # A regular 2D convolution layer with core 
+    core_layer = Conv2d(in_channels=core.shape[1], \
+            out_channels=core.shape[0], kernel_size=layer.kernel_size, 
+            stride = layer.stride, padding = layer.padding,
+            dilation = layer.dilation, bias = False)
+
+
+    # A pointwise convolution that increase the number of channels
+    last_layer = Conv2d(in_channels=last.shape[1], \
+            out_channels=last.shape[0], kernel_size=1, stride = 1, 
+            padding = 0, dilation = layer.dilation, bias = True)
+
+    last_layer.bias.data = layer.bias.data
+
+    first_layer.weight.data = \
+        torch.transpose(first, 1, 0).unsqueeze(-1).unsqueeze(-1)
+    last_layer.weight.data = last.unsqueeze(-1).unsqueeze(-1)
+    core_layer.weight.data = core
+
+    new_layers = [first_layer, core_layer, last_layer]
 
     return Sequential(*new_layers)

@@ -19,21 +19,21 @@ from tensorflow.keras.optimizers import SGD
 def _define_model(num_classes): 
     model = Sequential()
     #CNN specific layers
-    model.add(Conv2D(filters = 32, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_uniform', input_shape = (28,28,1), padding = "valid", strides = 1))
+    model.add(Conv2D(filters = 32, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (28,28,1), padding = "valid", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 64, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_uniform', input_shape = (16,16,32), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 64, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (16,16,32), padding = "same", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_uniform', input_shape = (6,6,64), padding = "same", strides = 1))
-    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_uniform', input_shape = (6,6,128), padding = "same", strides = 1))
-    model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_uniform', input_shape = (6,6,128), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_normal', input_shape = (6,6,64), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_normal', input_shape = (6,6,128), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (6,6,128), padding = "same", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
     model.add(Dropout(rate = 0.3))
     model.add(Flatten())
     #fully connected layer
-    model.add(Dense(units = 256, activation = "relu", kernel_initializer = "glorot_uniform"))
+    model.add(Dense(units = 256, activation = "relu", kernel_initializer = "glorot_normal"))
     model.add(Dropout(rate = 0.3))
-    model.add(Dense(units = 64, activation = "relu", kernel_initializer = "glorot_uniform"))
-    model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_uniform"))
+    model.add(Dense(units = 64, activation = "relu", kernel_initializer = "glorot_normal"))
+    model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_normal"))
 
     #optimizer
     opt = SGD(learning_rate = 0.01, momentum = 0.9)

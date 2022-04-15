@@ -4,8 +4,8 @@
 from save_load_dataset import *
 import torch
 import matplotlib.pyplot as plt
-from constants import N_LET_CLASSES, N_NUM_CLASSES
-from LeNet_PyTorch import LeNet_5
+from constants import N_LET_CLASSES, N_NUM_CLASSES, Decomposition
+from LeNet_PyTorch import LeNet_5, LeNet_5_Decomposed
 from pytorch_utils import *
 from torchsummary import summary
 
@@ -14,7 +14,7 @@ def _run_numbers():
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
     
-    lenet_numbers = LeNet_5(num_data_loaders, N_NUM_CLASSES)
+    lenet_numbers = LeNet_5(num_data_loaders, N_NUM_CLASSES, Decomposition.CP)
 
     if torch.cuda.is_available(): 
         lenet_numbers = lenet_numbers.cuda()
@@ -62,9 +62,10 @@ def run_lenet_pytorch():
 
 if __name__ == "__main__": 
  
-    #_run_numbers()
+    _run_numbers()
     #_run_letters()
-    _run_balanced()
+    #_run_balanced()
+    
 
     
     

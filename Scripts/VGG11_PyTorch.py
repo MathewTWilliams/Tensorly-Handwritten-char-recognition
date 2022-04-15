@@ -9,8 +9,8 @@ from torch.nn import Linear, Conv2d, MaxPool2d, Sequential
 from torch.nn import ReLU, Softmax, CrossEntropyLoss, Dropout
 from torch.optim import SGD
 from pytorch_utils import *
-
-
+from pytorch_decompositions import tucker_decomposition_cnn_layer, cp_decomposition_cnn_layer
+from constants import Decomposition
 
 
 class VGG11(Py_Torch_Base): 
@@ -103,3 +103,16 @@ class VGG11(Py_Torch_Base):
 
     def _define_optimizer(self):
         return SGD(self.parameters(), lr = 0.01, momentum = 0.9, weight_decay= 5e-4)
+
+
+class VGG11_Decomposed(VGG11): 
+
+    def __init__(self, loaders, num_classes, decomposition = Decomposition.CP): 
+        super(VGG11_Decomposed, self).__init__(loaders, num_classes)
+        self._decomposition = decomposition
+
+
+    def _define_cnn_layers(self):
+        org_cnn_layers = super(VGG11_Decomposed, self)._define_cnn_layers()
+        return decompose_cnn_layers(org_cnn_layers, self._decomposition)
+       

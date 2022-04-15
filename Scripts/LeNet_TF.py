@@ -22,15 +22,15 @@ from tensorflow.keras.optimizers import SGD
 def _define_model(num_classes): 
     model = Sequential()
     #CNN specific layers
-    model.add(Conv2D(filters = 6, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_uniform', input_shape = (28,28,1), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 6, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_normal', input_shape = (28,28,1), padding = "same", strides = 1))
     model.add(AveragePooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 16, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_uniform', input_shape = (14,14,6), padding = "valid", strides = 1))
+    model.add(Conv2D(filters = 16, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_normal', input_shape = (14,14,6), padding = "valid", strides = 1))
     model.add(AveragePooling2D(pool_size = (2,2), strides = 2 ))
-    model.add(Conv2D(filters = 120, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_uniform', input_shape = (7,7,16), padding = "valid", strides = 1))
+    model.add(Conv2D(filters = 120, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_normal', input_shape = (7,7,16), padding = "valid", strides = 1))
     model.add(Flatten())
     #fully connected layer
-    model.add(Dense(units = 84, activation = "tanh", kernel_initializer = "glorot_uniform"))
-    model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_uniform"))
+    model.add(Dense(units = 84, activation = "tanh", kernel_initializer = "glorot_normal"))
+    model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_normal"))
 
     #optimizer
     opt = SGD(learning_rate = 0.01, momentum = 0.9)

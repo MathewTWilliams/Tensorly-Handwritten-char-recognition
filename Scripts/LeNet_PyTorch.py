@@ -11,8 +11,8 @@ import torch
 from torch.nn import Linear, Conv2d, AvgPool2d, Sequential
 from torch.nn import Tanh, Softmax, CrossEntropyLoss
 from torch.optim import SGD
-from pytorch_utils import Py_Torch_Base, initialize_weights_bias
-
+from pytorch_utils import Py_Torch_Base, initialize_weights_bias, decompose_cnn_layers
+from constants import Decomposition
 
 
 class LeNet_5(Py_Torch_Base):
@@ -72,4 +72,24 @@ class LeNet_5(Py_Torch_Base):
     def _define_loss_function(self):
         return CrossEntropyLoss()
         
+
+class LeNet_5_Decomposed(LeNet_5): 
+
+    def __init__(self, loaders, num_classes, decomposition = Decomposition.CP): 
+        super(LeNet_5_Decomposed,self).__init__(loaders, num_classes)
+        self._decomposition = decomposition
+
+
+    def _define_cnn_layers(self):
+        org_cnn_layers = super(LeNet_5_Decomposed, self)._define_cnn_layers()
+        
+        return decompose_cnn_layers(org_cnn_layers, self._decomposition)
+
+
+
+
+               
+            
+
+
 
