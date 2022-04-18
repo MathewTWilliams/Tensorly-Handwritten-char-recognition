@@ -95,5 +95,17 @@ def estimate_tucker_ranks(layer, backend="pytorch"):
     unfold_1 = tl.base.unfold(weights, 1)
     _, diag_0, _, _ = EVBMF(unfold_0)
     _, diag_1, _, _ = EVBMF(unfold_1)
-    ranks = [diag_0.shape[0], diag_1.shape[1]]
-    return ranks
+    return [diag_0.shape[0], diag_1.shape[1]]
+    
+
+
+def estimate_cp_rank(layer, backend="pytorch"): 
+    
+    tl.set_backend(backend)
+    weights = layer.weight.data
+    unfold_0 = tl.base.unfold(weights,0)
+    unfold_1 = tl.base.unfold(weights, 1)
+    _, diag_0, _, _ = EVBMF(unfold_0)
+    _, diag_1, _, _ = EVBMF(unfold_1)
+
+    return max([diag_0.shape[0], diag_1.shape[1]])

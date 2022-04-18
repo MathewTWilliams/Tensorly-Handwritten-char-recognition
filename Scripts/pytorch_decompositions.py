@@ -9,7 +9,7 @@ from torch.nn import Conv2d, Sequential
 import torch
 
 import warnings
-warnings.simplefilter("ignore", UserWarning)
+#warnings.simplefilter("ignore", UserWarning)
 
 
 def cp_decomposition_cnn_layer(layer, rank):

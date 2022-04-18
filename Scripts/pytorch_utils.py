@@ -70,6 +70,9 @@ class Py_Torch_Base(Module):
 
         if validate:
             for _ in range(n_epochs):
+                #TODO 
+                #Make sure running tensorflow model with validation includes 
+                # validation time in total training time. 
                 start = datetime.now()
                 valid_loss = self._train(False)
                 end = datetime.now() 
@@ -83,6 +86,7 @@ class Py_Torch_Base(Module):
     def _train(self, on_train = True):
         data_set_name = "train" if on_train else "valid"
         running_total = 0
+        back_prop_time = 0
         for i, (images, labels) in enumerate(self._loaders[data_set_name]): 
             b_x = Variable(images)
             b_y = Variable(labels)
@@ -99,9 +103,13 @@ class Py_Torch_Base(Module):
             running_total += loss_train.item()
 
             if on_train: 
+                start = datetime.now()
                 loss_train.backward()
                 self._optimizer.step()
+                end = datetime.now()
+                back_prop_time += (end - start).total_seconds()
         
+        print("Back Propogation Time:", back_prop_time)
         return running_total / len(self._loaders[data_set_name].dataset)
 
 
@@ -150,7 +158,7 @@ def run_predictions(model, test_x, test_y):
         start = datetime.now() 
         output = model(test_x.cuda())
         end = datetime.now()
-        print("time:", (end-start).total_seconds())
+        print(len(test_x), "Predictions time:", (end-start).total_seconds())
 
     softmax = torch.exp(output).cpu()
     prob = list(softmax.numpy())
@@ -221,7 +229,8 @@ def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP):
             continue
 
         if decomposition == Decomposition.CP: 
-            rank = max(module.weight.data.numpy().shape) // 3
+            #rank = max(module.weight.data.numpy().shape) // 3
+            rank = estimate_cp_rank(module)
             decomposed_layers = cp_decomposition_cnn_layer(module, rank = rank)
             for layer in decomposed_layers: 
                 decomposed_cnn_layers.append(layer)
