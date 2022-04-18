@@ -111,6 +111,7 @@ def tucker_decomposition_cnn_layer(layer, ranks):
             stride = layer.stride, padding = layer.padding,
             dilation = layer.dilation, bias = False)
 
+    print("----------------------------------------------------------")
     print("core:", core.shape)
     print(core_layer)
     print("Weight Shape:", core_layer.weight.data.shape)
@@ -120,9 +121,11 @@ def tucker_decomposition_cnn_layer(layer, ranks):
             out_channels=last.shape[0], kernel_size=1, stride = 1, 
             padding = 0, dilation = layer.dilation, bias = True)
 
+    print("----------------------------------------------------------")
     print("last:", last.shape)
     print(last_layer)
     print("Weight Shape:", last_layer.weight.data.shape)
+    print("----------------------------------------------------------")
 
     last_layer.bias.data = layer.bias.data
 
