@@ -90,10 +90,20 @@ def tucker_decomposition_cnn_layer(layer, ranks):
     core, [last,first] = \
         partial_tucker(layer.weight.data, modes = [0,1], rank = ranks, init='svd')
 
+    
+    print("----------------------------------------------------------")
+    print(layer)
+    print("OG Layer Weights:", layer.weight.data.shape)
+
     # Pointwise convolution that reduces the channels
     first_layer = Conv2d(in_channels = first.shape[0], \
             out_channels=first.shape[1], kernel_size=1, 
             stride = 1, padding = 0, dilation=layer.dilation, bias = False)
+
+    print("----------------------------------------------------------")
+    print("first:", first.shape)
+    print(first_layer)
+    print("Weight Shape:", first_layer.weight.data.shape)
 
     # A regular 2D convolution layer with core 
     core_layer = Conv2d(in_channels=core.shape[1], \
@@ -101,11 +111,18 @@ def tucker_decomposition_cnn_layer(layer, ranks):
             stride = layer.stride, padding = layer.padding,
             dilation = layer.dilation, bias = False)
 
+    print("core:", core.shape)
+    print(core_layer)
+    print("Weight Shape:", core_layer.weight.data.shape)
 
     # A pointwise convolution that increase the number of channels
     last_layer = Conv2d(in_channels=last.shape[1], \
             out_channels=last.shape[0], kernel_size=1, stride = 1, 
             padding = 0, dilation = layer.dilation, bias = True)
+
+    print("last:", last.shape)
+    print(last_layer)
+    print("Weight Shape:", last_layer.weight.data.shape)
 
     last_layer.bias.data = layer.bias.data
 
