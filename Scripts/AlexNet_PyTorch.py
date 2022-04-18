@@ -92,11 +92,10 @@ class AlexNet(Py_Torch_Base):
 
 class AlexNet_Decomposed(AlexNet): 
 
-    def __init__(self, loaders, num_classes, decomposition = Decomposition.CP): 
+    def __init__(self, loaders, num_classes, decomposition = Decomposition.CP):
+        self._decomposition = decomposition 
         super(AlexNet_Decomposed, self).__init__(loaders, num_classes)
-        self._decomposition = decomposition
 
     def _define_cnn_layers(self):
         org_cnn_layers = super(AlexNet_Decomposed,self)._define_cnn_layers()
-
         return decompose_cnn_layers(org_cnn_layers, self._decomposition)

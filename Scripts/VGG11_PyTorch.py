@@ -108,8 +108,8 @@ class VGG11(Py_Torch_Base):
 class VGG11_Decomposed(VGG11): 
 
     def __init__(self, loaders, num_classes, decomposition = Decomposition.CP): 
-        super(VGG11_Decomposed, self).__init__(loaders, num_classes)
         self._decomposition = decomposition
+        super(VGG11_Decomposed, self).__init__(loaders, num_classes)
 
 
     def _define_cnn_layers(self):

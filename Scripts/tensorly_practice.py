@@ -150,7 +150,7 @@ if __name__ == "__main__":
     #tensor_manipulation_example()
     #tensor_unfolding()
     #n_mode_product()
-    #cp_decomposition()
+    cp_decomposition()
     #tucker_decomposition()
 
-    low_rank_tensor_regression()
+    #low_rank_tensor_regression()

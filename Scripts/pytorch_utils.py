@@ -146,8 +146,11 @@ def make_data_loaders(train_set_func, valid_set_func, normalize = True, num_colo
 
 def run_predictions(model, test_x, test_y): 
 
-    with torch.no_grad(): 
+    with torch.no_grad():
+        start = datetime.now() 
         output = model(test_x.cuda())
+        end = datetime.now()
+        print("time:", (end-start).total_seconds())
 
     softmax = torch.exp(output).cpu()
     prob = list(softmax.numpy())
@@ -209,21 +212,25 @@ def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP):
         
         #Skip first Convolution layer as it only has 1 input channel
         if type(module) is torch.nn.Conv2d and not found_first_cnn:
-            decomposed_cnn_layers.add_module(module._get_name(), module)
+            decomposed_cnn_layers.append(module)
             found_first_cnn = True
             continue 
         
         elif type(module) is not torch.nn.Conv2d: 
-            decomposed_cnn_layers.add_module(module._get_name(), module)
+            decomposed_cnn_layers.append(module)
+            continue
 
         if decomposition == Decomposition.CP: 
-            rank = max(module.weight.data.numpy().shape) // 3 
-            decomposed_layer = cp_decomposition_cnn_layer(module, rank = rank)
-            decomposed_cnn_layers.add_module("Decomposed_cnn_" + (i+1), decomposed_layer)
+            rank = max(module.weight.data.numpy().shape) // 3
+            decomposed_layers = cp_decomposition_cnn_layer(module, rank = rank)
+            for layer in decomposed_layers: 
+                decomposed_cnn_layers.append(layer)
 
         elif decomposition == Decomposition.Tucker:
-            ranks =  [module.weight.size(0)//2, module.weight.size(1)//2]
-            decomposed_layer = tucker_decomposition_cnn_layer(module, ranks = ranks)
-            decomposed_cnn_layers.add_module("Decomposed_cnn_"+(i+1), decomposed_layer)
+            ranks = estimate_tucker_ranks(module)
+            #ranks =  [module.weight.size(0)//2, module.weight.size(1)//2]
+            decomposed_layers = tucker_decomposition_cnn_layer(module, ranks = ranks)
+            for layer in decomposed_layers: 
+                decomposed_cnn_layers.append(layer)
 
-        return decomposed_cnn_layers
+    return decomposed_cnn_layers

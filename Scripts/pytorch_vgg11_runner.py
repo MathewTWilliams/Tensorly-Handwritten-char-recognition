@@ -1,6 +1,7 @@
 # Author: Matt Williams
 # Version: 3/22/2022
 
+from Scripts.VGG11_PyTorch import VGG11_Decomposed
 from save_load_dataset import *
 import torch
 import matplotlib.pyplot as plt
@@ -60,11 +61,61 @@ def run_vgg_11_pytorch():
     _run_balanced()
 
 
-if __name__ == "__main__": 
+def _run_numbers_decomposed(decomposition):
+    num_data_loaders = make_data_loaders(load_training_number_dataset, 
+                                        load_validation_number_dataset)
+    
+    vgg_11_numbers = VGG11_Decomposed(num_data_loaders, N_NUM_CLASSES, decomposition)
 
-    #_run_letters()
-    #_run_numbers()
-    _run_balanced()
+    if torch.cuda.is_available(): 
+        vgg_11_numbers = vgg_11_numbers.cuda()
+        vgg_11_numbers.to_cuda()
+
+    summary(vgg_11_numbers, (1, 28, 28), batch_size=32)
+    name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
+    run_model(vgg_11_numbers,valid_set_func=load_validation_number_dataset, name=name, dataset_name="Numbers")
+    del vgg_11_numbers
+
+def _run_letters_decomposed(decomposition):
+    let_data_loaders = make_data_loaders(load_training_letter_dataset, 
+                                        load_validation_letter_dataset)
+
+    vgg_11_letters = VGG11_Decomposed(let_data_loaders, N_LET_CLASSES, decomposition)
+
+    if torch.cuda.is_available():
+        vgg_11_letters = vgg_11_letters.cuda()
+        vgg_11_letters.to_cuda()
+
+    summary(vgg_11_letters, (1, 28, 28), batch_size=32)
+    name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
+    run_model(vgg_11_letters,valid_set_func=load_validation_letter_dataset, name=name, dataset_name="Letters")
+    del vgg_11_letters
+
+def _run_balanced_decomposed(decomposition):
+    bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
+                                        load_validation_balanced_dataset)
+
+    vgg_11_balanced = VGG11_Decomposed(bal_data_loaders, N_BAL_CLASSES, decomposition)
+
+    if torch.cuda.is_available():
+        vgg_11_balanced = vgg_11_balanced.cuda()
+        vgg_11_balanced.to_cuda()
+
+    summary(vgg_11_balanced, (1, 28, 28), batch_size=32)
+    name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
+    run_model(vgg_11_balanced,valid_set_func=load_validation_balanced_dataset, name=name, dataset_name="Balanced")
+    del vgg_11_balanced
+
+def run_decomp_vgg11_pytorch(decomposition = Decomposition.CP): 
+    _run_numbers_decomposed(decomposition)
+    _run_letters_decomposed(decomposition)
+    _run_balanced_decomposed(decomposition)
+
+if __name__ == "__main__": 
+    
+    run_vgg_11_pytorch()
+    run_decomp_vgg11_pytorch(Decomposition.CP)
+    run_decomp_vgg11_pytorch(Decomposition.Tucker)
 
     
     

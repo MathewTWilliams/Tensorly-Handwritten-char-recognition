@@ -1,9 +1,13 @@
 # Author: Matt Williams
 # Version: 3/27/2022
+# references: 
+# - https://github.com/jacobgil/pytorch-tensor-decompositions/blob/master/decompositions.py
 
 
 from pathlib import PurePath, Path
 from enum import Enum
+import tensorly as tl
+from VBMF.VBMF import EVBMF
 
 # File path for the complete training data in csv form
 # Not to be used outside of edit_dataset.py
@@ -79,3 +83,17 @@ class Decomposition(Enum):
     CP = 0
     Tucker = 1
 
+def get_decomp_name(decomposition): 
+    return str(decomposition).split(".")[-1]
+
+
+def estimate_tucker_ranks(layer, backend="pytorch"): 
+    
+    tl.set_backend(backend)
+    weights = layer.weight.data
+    unfold_0 = tl.base.unfold(weights, 0)
+    unfold_1 = tl.base.unfold(weights, 1)
+    _, diag_0, _, _ = EVBMF(unfold_0)
+    _, diag_1, _, _ = EVBMF(unfold_1)
+    ranks = [diag_0.shape[0], diag_1.shape[1]]
+    return ranks
