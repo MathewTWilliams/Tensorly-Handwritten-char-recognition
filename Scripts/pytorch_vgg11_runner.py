@@ -1,12 +1,11 @@
 # Author: Matt Williams
 # Version: 3/22/2022
 
-from Scripts.VGG11_PyTorch import VGG11_Decomposed
 from save_load_dataset import *
 import torch
 import matplotlib.pyplot as plt
 from constants import N_LET_CLASSES, N_NUM_CLASSES
-from VGG11_PyTorch import VGG11
+from VGG11_PyTorch import VGG11, VGG11_Decomposed
 from pytorch_utils import *
 from torchsummary import summary
 

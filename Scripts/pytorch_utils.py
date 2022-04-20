@@ -12,11 +12,10 @@ from torch.nn import Module, Sequential
 from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
 from constants import *
-from datetime import datetime
+from datetime import date, datetime
 from sklearn.metrics import classification_report
 import numpy as np
-from save_results import save_cnn_results
-from pytorch_decompositions import * 
+from save_results import save_cnn_results 
 
 class Py_Torch_Base(Module):
 
@@ -28,6 +27,7 @@ class Py_Torch_Base(Module):
         self._linear_layers = self._define_linear_layers()
         self._optimizer = self._define_optimizer()
         self._loss_function = self._define_loss_function()
+        self._back_prop_time = 0
 
 
     def forward(self, x):
@@ -61,32 +61,34 @@ class Py_Torch_Base(Module):
         train_losses = []
         valid_losses = []
 
-        for _ in range(n_epochs): 
+
+        for i in range(n_epochs): 
             start = datetime.now()
             train_loss = self._train(True)
-            end = datetime.now()
             train_losses.append(train_loss)
+            end = datetime.now()
             train_time += (end - start).total_seconds()
-
-        if validate:
-            for _ in range(n_epochs):
-                #TODO 
-                #Make sure running tensorflow model with validation includes 
-                # validation time in total training time. 
+            
+            if(validate): 
                 start = datetime.now()
                 valid_loss = self._train(False)
-                end = datetime.now() 
-                valid_losses.append(valid_loss)
+                end = datetime.now()
                 train_time += (end - start).total_seconds()
+                prev_val_loss = valid_losses[-1] if len(valid_losses) > 0 else 1
+                valid_losses.append(valid_loss)
+                if valid_loss > prev_val_loss:
+                    break
 
-        return train_losses, valid_losses, train_time
+        back_prop_time = self._back_prop_time
+        self._back_prop_time = 0
+        return train_losses, valid_losses, train_time, back_prop_time
 
 
 
     def _train(self, on_train = True):
         data_set_name = "train" if on_train else "valid"
         running_total = 0
-        back_prop_time = 0
+    
         for i, (images, labels) in enumerate(self._loaders[data_set_name]): 
             b_x = Variable(images)
             b_y = Variable(labels)
@@ -107,9 +109,8 @@ class Py_Torch_Base(Module):
                 loss_train.backward()
                 self._optimizer.step()
                 end = datetime.now()
-                back_prop_time += (end - start).total_seconds()
+                self._back_prop_time += (end - start).total_seconds()
         
-        print("Back Propogation Time:", back_prop_time)
         return running_total / len(self._loaders[data_set_name].dataset)
 
 
@@ -158,20 +159,21 @@ def run_predictions(model, test_x, test_y):
         start = datetime.now() 
         output = model(test_x.cuda())
         end = datetime.now()
-        print(len(test_x), "Predictions time:", (end-start).total_seconds())
 
     softmax = torch.exp(output).cpu()
     prob = list(softmax.numpy())
     predictions = np.argmax(prob, axis = -1)
 
     class_report = classification_report(test_y, predictions, output_dict=True)
+    class_report['# Predictions'] = len(test_y)
+    class_report["Prediction Time"] = (end-start).total_seconds()
     
     return class_report
 
 
 
 def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_color_channels = 1):
-    train_losses, valid_losses, train_time = model.run_epochs(N_EPOCHS, VALIDATE)
+    train_losses, valid_losses, train_time, back_prop_time = model.run_epochs(N_EPOCHS, VALIDATE)
 
 
     num_valid_x, num_valid_y = valid_set_func(normalize, num_color_channels, torch=True)
@@ -195,6 +197,8 @@ def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_c
         "Train Loss per Epoch" : train_losses,
         "Classification Report": class_report, 
         "Training Time": train_time,
+        "Back Propogation Time": back_prop_time, 
+        "Epochs": len(train_losses)
     }
     
     if VALIDATE: 
@@ -209,37 +213,3 @@ def initialize_weights_bias(layer):
     if layer.bias is not None: 
         torch.nn.init.zeros_(layer.bias)
 
-def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP): 
-    
-    decomposed_cnn_layers = Sequential()
-    found_first_cnn = False
-    for i, module in enumerate(cnn_layers.modules()):
-        #Skip first module in the list as it gives overview of sub-modules 
-        if i == 0: 
-            continue
-        
-        #Skip first Convolution layer as it only has 1 input channel
-        if type(module) is torch.nn.Conv2d and not found_first_cnn:
-            decomposed_cnn_layers.append(module)
-            found_first_cnn = True
-            continue 
-        
-        elif type(module) is not torch.nn.Conv2d: 
-            decomposed_cnn_layers.append(module)
-            continue
-
-        if decomposition == Decomposition.CP: 
-            #rank = max(module.weight.data.numpy().shape) // 3
-            rank = estimate_cp_rank(module)
-            decomposed_layers = cp_decomposition_cnn_layer(module, rank = rank)
-            for layer in decomposed_layers: 
-                decomposed_cnn_layers.append(layer)
-
-        elif decomposition == Decomposition.Tucker:
-            ranks = estimate_tucker_ranks(module)
-            #ranks =  [module.weight.size(0)//2, module.weight.size(1)//2]
-            decomposed_layers = tucker_decomposition_cnn_layer(module, ranks = ranks)
-            for layer in decomposed_layers: 
-                decomposed_cnn_layers.append(layer)
-
-    return decomposed_cnn_layers

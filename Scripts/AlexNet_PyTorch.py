@@ -7,8 +7,8 @@ import torch
 from torch.nn import Linear, Conv2d, MaxPool2d, Sequential
 from torch.nn import ReLU, Softmax, CrossEntropyLoss, Dropout
 from torch.optim import SGD
-from pytorch_utils import Py_Torch_Base, initialize_weights_bias, decompose_cnn_layers
-from pytorch_decompositions import tucker_decomposition_cnn_layer, cp_decomposition_cnn_layer
+from pytorch_utils import Py_Torch_Base, initialize_weights_bias
+from pytorch_decompositions import decompose_cnn_layers
 from constants import Decomposition
 
 class AlexNet(Py_Torch_Base):

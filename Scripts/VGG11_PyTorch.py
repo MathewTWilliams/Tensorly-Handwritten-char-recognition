@@ -9,7 +9,7 @@ from torch.nn import Linear, Conv2d, MaxPool2d, Sequential
 from torch.nn import ReLU, Softmax, CrossEntropyLoss, Dropout
 from torch.optim import SGD
 from pytorch_utils import *
-from pytorch_decompositions import tucker_decomposition_cnn_layer, cp_decomposition_cnn_layer
+from pytorch_decompositions import decompose_cnn_layers
 from constants import Decomposition
 
 
@@ -52,7 +52,7 @@ class VGG11(Py_Torch_Base):
             conv_2, # 14 x 14 x 64
             ReLU(inplace=True),
             MaxPool2d(kernel_size=2, stride=2, padding = 1), # 8 x 8 x 64
-            conv_3, # 8 x 8 x 128
+            conv_3, # 8 x 8 x 128            
             ReLU(inplace=True),
             conv_4, # 8 x 8 x 128
             ReLU(inplace=True),

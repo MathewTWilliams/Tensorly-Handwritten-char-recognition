@@ -1,11 +1,10 @@
 # Author: Matt Williams
 # Version: 3/22/2022
 
-from unicodedata import decomposition
 from save_load_dataset import *
 import torch
 import matplotlib.pyplot as plt
-from constants import N_LET_CLASSES, N_NUM_CLASSES, Decomposition, get_decomp_name
+from constants import N_LET_CLASSES, N_NUM_CLASSES, N_BAL_CLASSES, Decomposition, get_decomp_name
 from LeNet_PyTorch import LeNet_5, LeNet_5_Decomposed
 from pytorch_utils import *
 from torchsummary import summary
@@ -120,12 +119,11 @@ def run_decomp_lenet_pytorch(decomposition = Decomposition.CP):
 
 if __name__ == "__main__": 
  
-    #run_lenet_pytorch()
-    #run_decomp_lenet_pytorch(Decomposition.CP)
-    #run_decomp_lenet_pytorch(Decomposition.Tucker)
-    _run_numbers()
-    _run_numbers_decomposed(Decomposition.CP)
-    _run_numbers_decomposed(Decomposition.Tucker)
+    run_lenet_pytorch()
+    run_decomp_lenet_pytorch(Decomposition.CP)
+    run_decomp_lenet_pytorch(Decomposition.Tucker)
+
+
 
 
 

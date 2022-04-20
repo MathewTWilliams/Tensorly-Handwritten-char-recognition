@@ -5,24 +5,26 @@
 
 import tensorly as tl
 from tensorly.decomposition import parafac, partial_tucker
-from torch.nn import Conv2d, Sequential
+from torch.nn import Conv2d, Sequential, Dropout
 import torch
+from constants import Decomposition, estimate_cp_rank, estimate_tucker_ranks
 
 import warnings
 #warnings.simplefilter("ignore", UserWarning)
 
 
-def cp_decomposition_cnn_layer(layer, rank):
+def _cp_decomposition_cnn_layer(layer, rank):
 
     tl.set_backend("pytorch")
     # Perform CP decomposition on weight tensor
 
     print("----------------------------------------------------------")
-    print(layer)
     print("OG Layer Weights:",layer.weight.data.shape)
-     
-    weights, (last, first, vertical, horizontal) = \
-        parafac(layer.weight.data, rank=rank, init='svd')
+    print("ranks", rank)
+    print(layer)
+    
+    weights, (last, first, vertical, horizontal)= \
+        parafac(layer.weight.data, rank=rank, init='random')
     print("New Weights:", weights.shape)
     print("----------------------------------------------------------")
 
@@ -84,11 +86,11 @@ def cp_decomposition_cnn_layer(layer, rank):
 
     return new_layers
 
-def tucker_decomposition_cnn_layer(layer, ranks):
+def _tucker_decomposition_cnn_layer(layer, ranks):
 
     tl.set_backend("pytorch")
     core, [last,first] = \
-        partial_tucker(layer.weight.data, modes = [0,1], rank = ranks, init='svd')
+        partial_tucker(layer.weight.data, modes = [0,1], rank = ranks, init='random')
 
     
     print("----------------------------------------------------------")
@@ -137,3 +139,38 @@ def tucker_decomposition_cnn_layer(layer, ranks):
     new_layers = [first_layer, core_layer, last_layer]
 
     return new_layers
+
+
+def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP): 
+    
+    decomposed_cnn_layers = Sequential()
+    found_first_cnn = False
+    for i, module in enumerate(cnn_layers.modules()):
+        #Skip first module in the list as it gives overview of sub-modules 
+        if i == 0: 
+            continue
+        
+        #Skip first Convolution layer as it only has 1 input channel
+        if type(module) is torch.nn.Conv2d and not found_first_cnn:
+            decomposed_cnn_layers.append(module)
+            found_first_cnn = True
+            continue 
+        
+        elif type(module) is not torch.nn.Conv2d: 
+            decomposed_cnn_layers.append(module)
+            continue
+
+        if decomposition == Decomposition.CP: 
+            #rank = max(module.weight.data.numpy().shape) // 3
+            rank = estimate_cp_rank(module)
+            decomposed_layers = _cp_decomposition_cnn_layer(module, rank = rank)
+            for layer in decomposed_layers: 
+                decomposed_cnn_layers.append(layer)
+        elif decomposition == Decomposition.Tucker:
+            ranks = estimate_tucker_ranks(module)
+            #ranks =  [module.weight.size(0)//2, module.weight.size(1)//2]
+            decomposed_layers = _tucker_decomposition_cnn_layer(module, ranks = ranks)
+            for layer in decomposed_layers: 
+                decomposed_cnn_layers.append(layer)
+
+    return decomposed_cnn_layers

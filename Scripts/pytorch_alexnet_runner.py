@@ -1,12 +1,11 @@
 # Author: Matt Williams
 # Version: 3/22/2022
 
-from Scripts.AlexNet_PyTorch import AlexNet_Decomposed
 from save_load_dataset import *
 import torch
 import matplotlib.pyplot as plt
 from constants import N_LET_CLASSES, N_NUM_CLASSES, N_BAL_CLASSES, Decomposition, get_decomp_name
-from AlexNet_PyTorch import AlexNet
+from AlexNet_PyTorch import AlexNet, AlexNet_Decomposed
 from pytorch_utils import *
 from torchsummary import summary
 
@@ -112,9 +111,10 @@ def run_decomp_alexnet_pytorch(decomposition = Decomposition.CP):
 
 if __name__ == "__main__": 
     
-    run_alexnet_pytorch()
-    run_decomp_alexnet_pytorch(Decomposition.CP)
-    run_decomp_alexnet_pytorch(Decomposition.Tucker)
+    #run_alexnet_pytorch()
+    #run_decomp_alexnet_pytorch(Decomposition.CP)
+    #run_decomp_alexnet_pytorch(Decomposition.Tucker)
+    _run_numbers_decomposed(Decomposition.CP)
 
-    
+
     

@@ -11,7 +11,8 @@ import torch
 from torch.nn import Linear, Conv2d, AvgPool2d, Sequential
 from torch.nn import Tanh, Softmax, CrossEntropyLoss
 from torch.optim import SGD
-from pytorch_utils import Py_Torch_Base, initialize_weights_bias, decompose_cnn_layers
+from pytorch_utils import Py_Torch_Base, initialize_weights_bias
+from pytorch_decompositions import decompose_cnn_layers
 from constants import Decomposition
 
 
