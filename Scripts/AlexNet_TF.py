@@ -7,7 +7,8 @@
 import tensorflow as tf
 from save_load_dataset import *
 from constants import *
-from tf_utils import run_model
+from tf_utils import run_model, compile_model
+from tensorflow_decompositions import decompose_cnn_layers
 
 
 # Includes pylance can't confirm
@@ -35,29 +36,27 @@ def _define_model(num_classes):
     model.add(Dense(units = 64, activation = "relu", kernel_initializer = "glorot_normal"))
     model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_normal"))
 
-    #optimizer
-    opt = SGD(learning_rate = 0.01, momentum = 0.9)
-
-    model.compile(optimizer = opt, loss = "categorical_crossentropy")
-
     return model
 
 def _run_letters():
     model = _define_model(N_LET_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            "AlexNet", "Letters")
+            "AlexNet TF", "Letters")
     del model
 
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
-            "AlexNet", "Numbers")
+            "AlexNet TF", "Numbers")
     del model
 
 def _run_balanced():
     model = _define_model(N_BAL_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
-            "AlexNet", "Balanced")
+            "AlexNet TF", "Balanced")
     del model
 
 def run_alexnet_tf_models(): 
@@ -65,9 +64,41 @@ def run_alexnet_tf_models():
     _run_letters()
     _run_balanced()
 
+def _run_letters_decomposed(decomposition):
+    model = _define_model(N_LET_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-AlexNet TF"
+    run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
+            name, "Letters")
+    del model
+
+def _run_numbers_decomposed(decomposition):
+    model = _define_model(N_NUM_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-AlexNet TF"
+    run_model(model, load_training_number_dataset, load_validation_number_dataset, 
+            name, "Numbers")
+    del model
+
+def _run_balanced_decomposed(decomposition):
+    model = _define_model(N_BAL_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-AlexNet TF"
+    run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
+            name, "Balanced")
+    del model
+
+def run_alexnet_tf_decomposed(decomposition = Decomposition.CP): 
+    _run_numbers_decomposed(decomposition)
+    _run_letters_decomposed(decomposition)
+    _run_balanced_decomposed(decomposition)
+
 
 if __name__ == "__main__": 
-    #_run_letters()
-    #_run_numbers()
-    _run_balanced()
-
+    #run_alexnet_tf_models()
+    #run_alexnet_tf_decomposed(Decomposition.CP)
+    #run_alexnet_tf_decomposed(Decomposition.Tucker)
+    _run_numbers_decomposed(Decomposition.Tucker)

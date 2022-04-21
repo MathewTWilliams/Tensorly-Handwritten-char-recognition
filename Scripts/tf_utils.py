@@ -1,6 +1,7 @@
 # Author: Matt Williams
 # Version: 3/30/2022
 
+from gc import callbacks
 from sklearn.metrics import classification_report
 import numpy as np
 from save_results import save_cnn_results
@@ -9,8 +10,10 @@ from datetime import datetime
 
 # Includes Pylance can't confirm
 from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.callbacks import EarlyStopping
 
-
+#TODO edit method to include infer/run decomposition, compilation, run model method
 def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, normalize = True, num_color_channels = 1):
 
     training_hist = None
@@ -20,16 +23,21 @@ def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, n
     one_hot_train_y = to_categorical(train_y)
     one_hot_valid_y = to_categorical(valid_y)
 
+    stop = EarlyStopping(monitor = "val_loss", mode = "min")
+
     start = datetime.now()
     if VALIDATE:
-         training_hist = model.fit(train_x, one_hot_train_y, epochs = N_EPOCHS, batch_size = BATCH_SIZE, validation_data = (valid_x, one_hot_valid_y), verbose = 0)
+         training_hist = model.fit(train_x, one_hot_train_y, epochs = N_EPOCHS, batch_size = BATCH_SIZE, \
+             validation_data = (valid_x, one_hot_valid_y), verbose = 0, callbacks=[stop])
     else: 
-         training_hist = model.fit(train_x, one_hot_train_y, epochs = N_EPOCHS, batch_size = BATCH_SIZE, verbose = 0)
+         training_hist = model.fit(train_x, one_hot_train_y, epochs = N_EPOCHS, batch_size = BATCH_SIZE, verbose = 0, callbacks=[stop])
     end = datetime.now()
 
     one_hot_predictions = model.predict(valid_x, batch_size = BATCH_SIZE)
     predictions = np.argmax(one_hot_predictions, axis = -1)
     class_report = classification_report(valid_y, predictions, output_dict=True)
+    class_report['# Predictions'] = len(valid_y)
+    class_report["Prediction Time"] = (end-start).total_seconds()
 
     model_summary = []
     model.summary(print_fn= lambda x: model_summary.append(x))
@@ -48,5 +56,12 @@ def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, n
         results_dict['Valid Loss Per Epoch'] = training_hist.history['val_loss']
 
     save_cnn_results(results_dict, TF_RESULTS_FOLDER)
+
+
+def compile_model(model): 
+    opt = SGD(learning_rate = 0.01, momentum = 0.9)
+    model.compile(optimizer = opt, loss = "categorical_crossentropy")
+
+    return model
 
 

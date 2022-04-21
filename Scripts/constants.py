@@ -8,6 +8,7 @@ from pathlib import PurePath, Path
 from enum import Enum
 import tensorly as tl
 from VBMF.VBMF import EVBMF
+import tensorflow as tf
 
 # File path for the complete training data in csv form
 # Not to be used outside of edit_dataset.py
@@ -70,7 +71,7 @@ PYT_INPUT_SIZE = (1, PIXEL_SIDE_LENGTH, PIXEL_SIDE_LENGTH)
 
 BATCH_SIZE = 32
 
-N_EPOCHS = 20
+N_EPOCHS = 50
 
 N_NUM_CLASSES = 10
 N_LET_CLASSES = 37
@@ -90,7 +91,15 @@ def get_decomp_name(decomposition):
 def estimate_tucker_ranks(layer, backend="pytorch"): 
     
     tl.set_backend(backend)
-    weights = layer.weight.data
+
+    weights = None
+    if backend == "pytorch":
+        weights = layer.weight.data
+    elif backend == "tensorflow": 
+        weights = layer.get_weights()[0]
+        weights = tf.convert_to_tensor(weights)
+
+
     unfold_0 = tl.base.unfold(weights, 0)
     unfold_1 = tl.base.unfold(weights, 1)
     _, diag_0, _, _ = EVBMF(unfold_0)
@@ -102,10 +111,19 @@ def estimate_tucker_ranks(layer, backend="pytorch"):
 def estimate_cp_rank(layer, backend="pytorch"): 
     
     tl.set_backend(backend)
-    weights = layer.weight.data
+
+    weights = None
+    if backend == "pytorch": 
+        weights = layer.weight.data
+    elif backend == "tensorflow": 
+        weights = layer.get_weights()[0]
+        weights = tf.convert_to_tensor(weights)
+
+
     unfold_0 = tl.base.unfold(weights,0)
-    unfold_1 = tl.base.unfold(weights, 1)
+    unfold_1 = tl.base.unfold(weights,1)
     _, diag_0, _, _ = EVBMF(unfold_0)
     _, diag_1, _, _ = EVBMF(unfold_1)
 
     return max([diag_0.shape[0], diag_1.shape[1]])
+

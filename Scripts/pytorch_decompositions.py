@@ -96,6 +96,7 @@ def _tucker_decomposition_cnn_layer(layer, ranks):
     print("----------------------------------------------------------")
     print(layer)
     print("OG Layer Weights:", layer.weight.data.shape)
+    print("Ranks:", ranks)
 
     # Pointwise convolution that reduces the channels
     first_layer = Conv2d(in_channels = first.shape[0], \

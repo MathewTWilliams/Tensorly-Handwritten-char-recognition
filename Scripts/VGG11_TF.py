@@ -8,7 +8,8 @@
 import tensorflow as tf
 from save_load_dataset import *
 from constants import *
-from tf_utils import run_model
+from tf_utils import run_model, compile_model
+from tensorflow_decompositions import decompose_cnn_layers
 
 
 # Includes pylance can't confirm
@@ -63,25 +64,27 @@ def _define_model(num_classes):
     model.add(Dropout(rate = 0.3))
     model.add(Dense(units = num_classes, activation = "softmax", kernel_initializer = "glorot_normal", kernel_regularizer = l2(5e-4)))
 
-    opt = SGD(learning_rate = 0.01, momentum = 0.9)
-    model.compile(optimizer = opt, loss = "categorical_crossentropy")
+    
 
     return model
 
 def _run_letters():
     model = _define_model(N_LET_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            "VGG-11", "Letters")
+            "VGG-11 TF", "Letters")
     del model
 
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
             "VGG-11", "Numbers")
     del model
 
 def _run_balanced():
     model = _define_model(N_BAL_CLASSES)
+    model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
             "VGG-11", "Balanced")
     del model
@@ -94,9 +97,44 @@ def run_vgg_11_tf_models():
     
 
 
+def _run_letters_decomposed(decomposition):
+    model = _define_model(N_LET_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-VGG-11 TF"
+    run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
+            name, "Letters")
+    del model
+
+def _run_numbers_decomposed(decomposition):
+    model = _define_model(N_NUM_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-VGG-11 TF"
+    run_model(model, load_training_number_dataset, load_validation_number_dataset, 
+            name, "Numbers")
+    del model
+
+def _run_balanced_decomposed(decomposition):
+    model = _define_model(N_BAL_CLASSES)
+    model = decompose_cnn_layers(model, decomposition)
+    model = compile_model(model)
+    name = get_decomp_name(decomposition) + "-VGG-11 TF"
+    run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
+            name, "Balanced")
+    del model
+
+def run_vgg11_tf_decomposed(decomposition = Decomposition.CP): 
+    _run_numbers_decomposed(decomposition)
+    _run_letters_decomposed(decomposition)
+    _run_balanced_decomposed(decomposition)
+
+
+
+
 if __name__ == "__main__":
 
-    #_run_letters()
-    #_run_numbers()
-    _run_balanced()
+    run_vgg_11_tf_models()
+    run_vgg11_tf_decomposed(Decomposition.CP)
+    run_vgg11_tf_decomposed(Decomposition.Tucker)
 

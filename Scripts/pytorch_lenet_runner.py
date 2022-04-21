@@ -119,10 +119,10 @@ def run_decomp_lenet_pytorch(decomposition = Decomposition.CP):
 
 if __name__ == "__main__": 
  
-    run_lenet_pytorch()
-    run_decomp_lenet_pytorch(Decomposition.CP)
-    run_decomp_lenet_pytorch(Decomposition.Tucker)
-
+    #run_lenet_pytorch()
+    #run_decomp_lenet_pytorch(Decomposition.CP)
+    #run_decomp_lenet_pytorch(Decomposition.Tucker)
+    _run_numbers_decomposed(Decomposition.CP)
 
 
 
