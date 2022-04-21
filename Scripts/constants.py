@@ -122,8 +122,12 @@ def estimate_cp_rank(layer, backend="pytorch"):
 
     unfold_0 = tl.base.unfold(weights,0)
     unfold_1 = tl.base.unfold(weights,1)
+    unfold_2 = tl.base.unfold(weights,2)
+    unfold_3 = tl.base.unfold(weights, 3)
     _, diag_0, _, _ = EVBMF(unfold_0)
     _, diag_1, _, _ = EVBMF(unfold_1)
+    _, diag_2, _, _ = EVBMF(unfold_2)
+    _, diag_3, _, _ = EVBMF(unfold_3)
 
-    return max([diag_0.shape[0], diag_1.shape[1]])
+    return max([diag_0.shape[0], diag_1.shape[1], diag_2.shape[2], diag_3.shape[3]])
 
