@@ -193,15 +193,15 @@ def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP):
 
     count = 0
     decomposed_model = Sequential()
-    found_first_cnn = False
+    #found_first_cnn = False
     for i, layer in enumerate(cnn_layers.layers): 
 
-        if type(layer) is Conv2D and not found_first_cnn: 
-            decomposed_model.add(layer)
-            found_first_cnn = True
-            continue
+        #if type(layer) is Conv2D and not found_first_cnn: 
+            #decomposed_model.add(layer)
+            #found_first_cnn = True
+            #continue
 
-        elif type(layer) is not Conv2D:
+        if type(layer) is not Conv2D:
             decomposed_model.add(layer)
             continue
 
@@ -209,7 +209,6 @@ def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP):
             rank = estimate_cp_rank(layer, backend="tensorflow")
             decomposed_layers = _cp_decomposition_cnn_layer(layer, rank = rank)
             for decomposed_layer in decomposed_layers: 
-                print(count)
                 decomposed_model.add(decomposed_layer)
                 count += 1
             count = 0 

@@ -42,21 +42,21 @@ def _run_letters():
     model = _define_model(N_LET_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            "AlexNet TF", "Letters")
+            load_testing_letter_dataset, "AlexNet TF", "Letters")
     del model
 
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
-            "AlexNet TF", "Numbers")
+            load_testing_number_dataset, "AlexNet TF", "Numbers")
     del model
 
 def _run_balanced():
     model = _define_model(N_BAL_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
-            "AlexNet TF", "Balanced")
+            load_testing_balanced_dataset, "AlexNet TF", "Balanced")
     del model
 
 def run_alexnet_tf_models(): 
@@ -70,7 +70,7 @@ def _run_letters_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-AlexNet TF"
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            name, "Letters")
+            load_testing_letter_dataset, name, "Letters")
     del model
 
 def _run_numbers_decomposed(decomposition):
@@ -79,7 +79,7 @@ def _run_numbers_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-AlexNet TF"
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
-            name, "Numbers")
+            load_testing_number_dataset, name, "Numbers")
     del model
 
 def _run_balanced_decomposed(decomposition):
@@ -88,7 +88,7 @@ def _run_balanced_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-AlexNet TF"
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
-            name, "Balanced")
+            load_testing_balanced_dataset,name, "Balanced")
     del model
 
 def run_alexnet_tf_decomposed(decomposition = Decomposition.CP): 

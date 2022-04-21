@@ -145,17 +145,17 @@ def _tucker_decomposition_cnn_layer(layer, ranks):
 def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP): 
     
     decomposed_cnn_layers = Sequential()
-    found_first_cnn = False
+    #found_first_cnn = False
     for i, module in enumerate(cnn_layers.modules()):
         #Skip first module in the list as it gives overview of sub-modules 
         if i == 0: 
             continue
         
         #Skip first Convolution layer as it only has 1 input channel
-        if type(module) is torch.nn.Conv2d and not found_first_cnn:
-            decomposed_cnn_layers.append(module)
-            found_first_cnn = True
-            continue 
+        #if type(module) is torch.nn.Conv2d and not found_first_cnn:
+            #decomposed_cnn_layers.append(module)
+            #found_first_cnn = True
+            #continue 
         
         elif type(module) is not torch.nn.Conv2d: 
             decomposed_cnn_layers.append(module)

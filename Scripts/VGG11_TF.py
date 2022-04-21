@@ -72,21 +72,21 @@ def _run_letters():
     model = _define_model(N_LET_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            "VGG-11 TF", "Letters")
+            load_testing_letter_dataset, "VGG-11 TF", "Letters")
     del model
 
 def _run_numbers():
     model = _define_model(N_NUM_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
-            "VGG-11", "Numbers")
+            load_testing_number_dataset, "VGG-11", "Numbers")
     del model
 
 def _run_balanced():
     model = _define_model(N_BAL_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
-            "VGG-11", "Balanced")
+            load_testing_balanced_dataset, "VGG-11", "Balanced")
     del model
 
 
@@ -103,7 +103,7 @@ def _run_letters_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-VGG-11 TF"
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
-            name, "Letters")
+            load_testing_letter_dataset, name, "Letters")
     del model
 
 def _run_numbers_decomposed(decomposition):
@@ -112,7 +112,7 @@ def _run_numbers_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-VGG-11 TF"
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
-            name, "Numbers")
+            load_testing_number_dataset, name, "Numbers")
     del model
 
 def _run_balanced_decomposed(decomposition):
@@ -121,7 +121,7 @@ def _run_balanced_decomposed(decomposition):
     model = compile_model(model)
     name = get_decomp_name(decomposition) + "-VGG-11 TF"
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
-            name, "Balanced")
+            load_testing_balanced_dataset, name, "Balanced")
     del model
 
 def run_vgg11_tf_decomposed(decomposition = Decomposition.CP): 

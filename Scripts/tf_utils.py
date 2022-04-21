@@ -14,14 +14,17 @@ from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import EarlyStopping
 
 #TODO edit method to include infer/run decomposition, compilation, run model method
-def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, normalize = True, num_color_channels = 1):
+def run_model(model, train_set_func, valid_set_func, test_set_func, \
+    model_name, dataset_name, normalize = True, num_color_channels = 1):
 
     training_hist = None
     train_x, train_y = train_set_func(normalize=normalize, num_color_channels=num_color_channels)
     valid_x, valid_y = valid_set_func(normalize=normalize, num_color_channels=num_color_channels)
+    test_x, test_y = test_set_func(normalize = normalize, num_color_channels = num_color_channels)
 
     one_hot_train_y = to_categorical(train_y)
     one_hot_valid_y = to_categorical(valid_y)
+    one_hot_test_y = to_categorical(test_y)
 
     stop = EarlyStopping(monitor = "val_loss", mode = "min")
 
@@ -33,11 +36,13 @@ def run_model(model, train_set_func, valid_set_func, model_name, dataset_name, n
          training_hist = model.fit(train_x, one_hot_train_y, epochs = N_EPOCHS, batch_size = BATCH_SIZE, verbose = 0, callbacks=[stop])
     end = datetime.now()
 
-    one_hot_predictions = model.predict(valid_x, batch_size = BATCH_SIZE)
+    predict_start = datetime.now()
+    one_hot_predictions = model.predict(test_x, batch_size = BATCH_SIZE)
+    predict_end = datetime.now()
     predictions = np.argmax(one_hot_predictions, axis = -1)
-    class_report = classification_report(valid_y, predictions, output_dict=True)
-    class_report['# Predictions'] = len(valid_y)
-    class_report["Prediction Time"] = (end-start).total_seconds()
+    class_report = classification_report(test_y, predictions, output_dict=True)
+    class_report['# Predictions'] = len(test_y)
+    class_report["Prediction Time"] = (predict_end-predict_start).total_seconds()
 
     model_summary = []
     model.summary(print_fn= lambda x: model_summary.append(x))

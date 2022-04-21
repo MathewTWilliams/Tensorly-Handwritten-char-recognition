@@ -21,7 +21,7 @@ def _run_numbers():
         alex_numbers.to_cuda()
 
     summary(alex_numbers, input_size=(1, 28, 28), batch_size=32, device="cuda")
-    run_model(alex_numbers,valid_set_func=load_validation_number_dataset, name="AlexNet Pytorch", dataset_name="Numbers")
+    run_model(alex_numbers,valid_set_func=load_testing_number_dataset, name="AlexNet Pytorch", dataset_name="Numbers")
     del alex_numbers
 
 def _run_letters():
@@ -35,7 +35,7 @@ def _run_letters():
         alex_letters.to_cuda()
 
     summary(alex_letters, input_size=(1, 28, 28), batch_size=32, device="cuda")
-    run_model(alex_letters,valid_set_func=load_validation_letter_dataset, name="AlexNet Pytorch", dataset_name="Letters")
+    run_model(alex_letters,valid_set_func=load_testing_letter_dataset, name="AlexNet Pytorch", dataset_name="Letters")
     del alex_letters
 
 def _run_balanced():
@@ -49,7 +49,7 @@ def _run_balanced():
         alex_balanced.to_cuda()
 
     summary(alex_balanced, input_size=(1, 28, 28), batch_size=32, device="cuda")
-    run_model(alex_balanced,valid_set_func=load_validation_balanced_dataset, name="AlexNet Pytorch", dataset_name="Balanced")
+    run_model(alex_balanced,valid_set_func=load_testing_balanced_dataset, name="AlexNet Pytorch", dataset_name="Balanced")
     del alex_balanced
 
 
@@ -71,7 +71,7 @@ def _run_numbers_decomposed(decomposition):
 
     summary(alex_numbers, input_size=(1, 28, 28), batch_size=32, device="cuda")
     name = get_decomp_name(decomposition) + "-AlexNet Pytorch"
-    run_model(alex_numbers,valid_set_func=load_validation_number_dataset, name=name, dataset_name="Numbers")
+    run_model(alex_numbers,valid_set_func=load_testing_number_dataset, name=name, dataset_name="Numbers")
     del alex_numbers
 
 def _run_letters_decomposed(decomposition):
@@ -86,7 +86,7 @@ def _run_letters_decomposed(decomposition):
 
     summary(alex_letters, input_size=(1, 28, 28), batch_size=32, device="cuda")
     name = get_decomp_name(decomposition) + "-AlexNet Pytorch"
-    run_model(alex_letters,valid_set_func=load_validation_letter_dataset, name=name, dataset_name="Letters")
+    run_model(alex_letters,valid_set_func=load_testing_letter_dataset, name=name, dataset_name="Letters")
     del alex_letters
 
 def _run_balanced_decomposed(decomposition): 
@@ -101,7 +101,7 @@ def _run_balanced_decomposed(decomposition):
 
     summary(alex_balanced, input_size=(1, 28, 28), batch_size=32, device="cuda")
     name = get_decomp_name(decomposition) + "-AlexNet Pytorch"
-    run_model(alex_balanced,valid_set_func=load_validation_balanced_dataset, name=name, dataset_name="Balanced")
+    run_model(alex_balanced,valid_set_func=load_testing_balanced_dataset, name=name, dataset_name="Balanced")
     del alex_balanced
 
 def run_decomp_alexnet_pytorch(decomposition = Decomposition.CP): 

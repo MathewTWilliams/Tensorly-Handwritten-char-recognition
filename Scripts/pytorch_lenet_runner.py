@@ -22,7 +22,7 @@ def _run_numbers():
 
     summary(lenet_numbers, (1, 28, 28), batch_size=32)
 
-    run_model(lenet_numbers,valid_set_func=load_validation_number_dataset, name="LeNet-5 Pytorch", dataset_name="Numbers")
+    run_model(lenet_numbers,valid_set_func=load_testing_number_dataset, name="LeNet-5 Pytorch", dataset_name="Numbers")
     del lenet_numbers
 
 def _run_letters():
@@ -36,7 +36,7 @@ def _run_letters():
         lenet_letters.to_cuda()
 
     summary(lenet_letters, (1, 28, 28), batch_size=32)
-    run_model(lenet_letters,valid_set_func=load_validation_letter_dataset, name="LeNet-5 Pytorch", dataset_name="Letters")
+    run_model(lenet_letters,valid_set_func=load_testing_letter_dataset, name="LeNet-5 Pytorch", dataset_name="Letters")
     del lenet_letters
 
 def _run_balanced():
@@ -50,7 +50,7 @@ def _run_balanced():
         lenet_balanced.to_cuda()
 
     summary(lenet_balanced, (1, 28, 28), batch_size=32)
-    run_model(lenet_balanced,valid_set_func=load_validation_balanced_dataset, name="LeNet-5 Pytorch", dataset_name="Balanced")
+    run_model(lenet_balanced,valid_set_func=load_testing_balanced_dataset, name="LeNet-5 Pytorch", dataset_name="Balanced")
     del lenet_balanced
 
 def run_lenet_pytorch(): 
@@ -74,7 +74,7 @@ def _run_numbers_decomposed(decomposition):
 
     summary(lenet_numbers, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-LeNet-5 Pytorch"
-    run_model(lenet_numbers,valid_set_func=load_validation_number_dataset, name=name, dataset_name="Numbers")
+    run_model(lenet_numbers,valid_set_func=load_testing_number_dataset, name=name, dataset_name="Numbers")
     del lenet_numbers
 
 
@@ -92,7 +92,7 @@ def _run_letters_decomposed(decomposition):
 
     summary(lenet_letters, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-LeNet-5 Pytorch"
-    run_model(lenet_letters,valid_set_func=load_validation_letter_dataset, name=name, dataset_name="Letters")
+    run_model(lenet_letters,valid_set_func=load_testing_letter_dataset, name=name, dataset_name="Letters")
     del lenet_letters
 
 def _run_balanced_decomposed(decomposition):
@@ -107,7 +107,7 @@ def _run_balanced_decomposed(decomposition):
 
     summary(lenet_balanced, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-LeNet-5 Pytorch"
-    run_model(lenet_balanced,valid_set_func=load_validation_balanced_dataset, name=name, dataset_name="Balanced")
+    run_model(lenet_balanced,valid_set_func=load_testing_balanced_dataset, name=name, dataset_name="Balanced")
     del lenet_balanced
 
 def run_decomp_lenet_pytorch(decomposition = Decomposition.CP): 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     #run_lenet_pytorch()
     #run_decomp_lenet_pytorch(Decomposition.CP)
     #run_decomp_lenet_pytorch(Decomposition.Tucker)
-    _run_numbers_decomposed(Decomposition.CP)
+    _run_numbers()
 
 
 

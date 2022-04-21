@@ -22,7 +22,7 @@ def _run_numbers():
 
     summary(vgg_11_numbers, (1, 28, 28), batch_size=32)
 
-    run_model(vgg_11_numbers,valid_set_func=load_validation_number_dataset, name="VGG-11 Pytorch", dataset_name="Numbers")
+    run_model(vgg_11_numbers,valid_set_func=load_testing_number_dataset, name="VGG-11 Pytorch", dataset_name="Numbers")
     del vgg_11_numbers
 
 def _run_letters():
@@ -36,7 +36,7 @@ def _run_letters():
         vgg_11_letters.to_cuda()
 
     summary(vgg_11_letters, (1, 28, 28), batch_size=32)
-    run_model(vgg_11_letters,valid_set_func=load_validation_letter_dataset, name="VGG-11 Pytorch", dataset_name="Letters")
+    run_model(vgg_11_letters,valid_set_func=load_testing_letter_dataset, name="VGG-11 Pytorch", dataset_name="Letters")
     del vgg_11_letters
 
 def _run_balanced():
@@ -50,7 +50,7 @@ def _run_balanced():
         vgg_11_balanced.to_cuda()
 
     summary(vgg_11_balanced, (1, 28, 28), batch_size=32)
-    run_model(vgg_11_balanced,valid_set_func=load_validation_balanced_dataset, name="VGG-11 Pytorch", dataset_name="Balanced")
+    run_model(vgg_11_balanced,valid_set_func=load_testing_balanced_dataset, name="VGG-11 Pytorch", dataset_name="Balanced")
     del vgg_11_balanced
 
 
@@ -72,7 +72,7 @@ def _run_numbers_decomposed(decomposition):
 
     summary(vgg_11_numbers, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
-    run_model(vgg_11_numbers,valid_set_func=load_validation_number_dataset, name=name, dataset_name="Numbers")
+    run_model(vgg_11_numbers,valid_set_func=load_testing_number_dataset, name=name, dataset_name="Numbers")
     del vgg_11_numbers
 
 def _run_letters_decomposed(decomposition):
@@ -87,7 +87,7 @@ def _run_letters_decomposed(decomposition):
 
     summary(vgg_11_letters, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
-    run_model(vgg_11_letters,valid_set_func=load_validation_letter_dataset, name=name, dataset_name="Letters")
+    run_model(vgg_11_letters,valid_set_func=load_testing_letter_dataset, name=name, dataset_name="Letters")
     del vgg_11_letters
 
 def _run_balanced_decomposed(decomposition):
@@ -102,7 +102,7 @@ def _run_balanced_decomposed(decomposition):
 
     summary(vgg_11_balanced, (1, 28, 28), batch_size=32)
     name = get_decomp_name(decomposition) + "-VGG-11 Pytorch"
-    run_model(vgg_11_balanced,valid_set_func=load_validation_balanced_dataset, name=name, dataset_name="Balanced")
+    run_model(vgg_11_balanced,valid_set_func=load_testing_balanced_dataset, name=name, dataset_name="Balanced")
     del vgg_11_balanced
 
 def run_decomp_vgg11_pytorch(decomposition = Decomposition.CP): 

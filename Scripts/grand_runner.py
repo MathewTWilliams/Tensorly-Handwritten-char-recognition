@@ -18,6 +18,19 @@ if __name__ == "__main__":
     run_decomp_alexnet_pytorch(Decomposition.CP)
     run_decomp_alexnet_pytorch(Decomposition.Tucker)
 
-    run_vgg_11_pytorch()
-    run_decomp_vgg11_pytorch(Decomposition.CP)
-    run_decomp_vgg11_pytorch(Decomposition.Tucker)
+    #run_vgg_11_pytorch()
+    #run_decomp_vgg11_pytorch(Decomposition.CP)
+    #run_decomp_vgg11_pytorch(Decomposition.Tucker)
+
+
+    run_lenet_tf_models()
+    #run_lenet_tf_decomposed(Decomposition.CP)
+    run_lenet_tf_decomposed(Decomposition.Tucker)
+
+    run_alexnet_tf_models()
+    #run_alexnet_tf_decomposed(Decomposition.CP)
+    #run_alexnet_tf_decomposed(Decomposition.Tucker)
+
+    run_vgg_11_tf_models()
+    #run_vgg11_tf_decomposed(Decomposition.CP)
+    #run_vgg11_tf_decomposed(Decomposition.Tucker)
