@@ -18,7 +18,7 @@ import numpy as np
 from save_results import save_cnn_results 
 
 class Py_Torch_Base(Module):
-
+    """Base class for all Py-Torch models"""
     def __init__(self, loaders, num_classes): 
         super(Py_Torch_Base, self).__init__()
         self._loaders = loaders
@@ -31,6 +31,7 @@ class Py_Torch_Base(Module):
 
 
     def forward(self, x):
+        """Overriden Forward Pass method"""
         x = x.to(dtype=torch.float)
         x = self._cnn_layers(x)
         x = x.view(x.size(0), -1)
@@ -53,10 +54,12 @@ class Py_Torch_Base(Module):
         '''Needs to be defined by the super class'''
         pass
 
-    def to_cuda(self): 
+    def to_cuda(self):
+        """Method to use if cuda is detected""" 
         self._loss_function = self._loss_function.cuda() 
 
     def run_epochs(self, n_epochs, validate = True): 
+        """ Run the model through the given number of epochs or until validation loss increases"""
         train_time = 0
         train_losses = []
         valid_losses = []
@@ -86,6 +89,7 @@ class Py_Torch_Base(Module):
 
 
     def _train(self, on_train = True):
+        '''Method runs the model through a single epoch'''
         data_set_name = "train" if on_train else "valid"
         running_total = 0
     
@@ -114,7 +118,8 @@ class Py_Torch_Base(Module):
         return running_total / len(self._loaders[data_set_name].dataset)
 
 
-class EMNIST_Dataset(Dataset): 
+class EMNIST_Dataset(Dataset):
+    '''Small class to hold our data set for use on Py-Torch models.'''
     def __init__(self, data, labels): 
         self._data = data
         self._labels = labels
@@ -128,7 +133,7 @@ class EMNIST_Dataset(Dataset):
 
 
 def make_data_loaders(train_set_func, valid_set_func, normalize = True, num_color_channels = 1):
-
+    '''Make our Py-Torch Data loaders'''
     train_x, train_y = train_set_func(normalize, num_color_channels, torch = True)
     valid_x, valid_y = valid_set_func(normalize, num_color_channels, torch = True)
 
@@ -154,7 +159,7 @@ def make_data_loaders(train_set_func, valid_set_func, normalize = True, num_colo
     return loaders
 
 def run_predictions(model, test_x, test_y): 
-
+    '''Given a model and a test set, make a classification report on the results'''
     with torch.no_grad():
         start = datetime.now() 
         output = model(test_x.cuda())
@@ -173,6 +178,7 @@ def run_predictions(model, test_x, test_y):
 
 
 def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_color_channels = 1):
+    '''Method used to train the given model on the given dataset information, fit the model and test it. Saves results'''
     train_losses, valid_losses, train_time, back_prop_time = model.run_epochs(N_EPOCHS, VALIDATE)
 
 
@@ -207,7 +213,7 @@ def run_model(model, valid_set_func, name, dataset_name, normalize = True, num_c
     save_cnn_results(results_dict, PYT_RESULTS_FOLDER)
 
 def initialize_weights_bias(layer): 
-    
+    '''Given a layer, intializer the weights and biases'''
     if layer.weight is not None: 
         torch.nn.init.xavier_normal_(layer.weight)
     if layer.bias is not None: 

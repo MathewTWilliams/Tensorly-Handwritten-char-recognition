@@ -18,14 +18,15 @@ from tensorflow.keras.optimizers import SGD
 
 
 def _define_model(num_classes): 
+    '''Defines the Tensorflow Implementation of a scaled down AlexNet'''
     model = Sequential()
     #CNN specific layers
     model.add(Conv2D(filters = 32, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (28,28,1), padding = "valid", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
     model.add(Conv2D(filters = 64, kernel_size = (5,5), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (16,16,32), padding = "same", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
-    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_normal', input_shape = (6,6,64), padding = "same", strides = 1))
-    model.add(Conv2D(filters = 128, kernel_size = (3,3), kernel_initializer ='glorot_normal', input_shape = (6,6,128), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 128, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (6,6,64), padding = "same", strides = 1))
+    model.add(Conv2D(filters = 128, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (6,6,128), padding = "same", strides = 1))
     model.add(Conv2D(filters = 64, kernel_size = (3,3), activation = "relu", kernel_initializer ='glorot_normal', input_shape = (6,6,128), padding = "same", strides = 1))
     model.add(MaxPooling2D(pool_size = (2,2), strides = 2))
     model.add(Dropout(rate = 0.3))
@@ -39,6 +40,7 @@ def _define_model(num_classes):
     return model
 
 def _run_letters():
+    '''Method to run the scaled down AlexNet Model on the letters dataset.'''
     model = _define_model(N_LET_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
@@ -46,6 +48,7 @@ def _run_letters():
     del model
 
 def _run_numbers():
+    '''Method to run the scaled down AlexNet Model on the numbers dataset.'''
     model = _define_model(N_NUM_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
@@ -53,18 +56,21 @@ def _run_numbers():
     del model
 
 def _run_balanced():
+    '''Method to run the scaled down AlexNet Model on the entire dataset.'''
     model = _define_model(N_BAL_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
             load_testing_balanced_dataset, "AlexNet TF", "Balanced")
     del model
 
-def run_alexnet_tf_models(): 
+def run_alexnet_tf_models():
+    '''Method used to run all variations of the regular scaled down AlexNet Model''' 
     _run_numbers()
     _run_letters()
     _run_balanced()
 
 def _run_letters_decomposed(decomposition):
+    '''Given the type of decomposition, run the scaled down Decomposed AlexNet Model on the letters dataset.'''
     model = _define_model(N_LET_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -74,6 +80,7 @@ def _run_letters_decomposed(decomposition):
     del model
 
 def _run_numbers_decomposed(decomposition):
+    '''Given the type of decomposition, run the scaled down Decomposed AlexNet Model on the numbers dataset.'''
     model = _define_model(N_NUM_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -83,6 +90,7 @@ def _run_numbers_decomposed(decomposition):
     del model
 
 def _run_balanced_decomposed(decomposition):
+    '''Given the type of decomposition, run the scaled down Decomposed AlexNet Model on the entire dataset.'''
     model = _define_model(N_BAL_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -91,7 +99,8 @@ def _run_balanced_decomposed(decomposition):
             load_testing_balanced_dataset,name, "Balanced")
     del model
 
-def run_alexnet_tf_decomposed(decomposition = Decomposition.CP): 
+def run_alexnet_tf_decomposed(decomposition = Decomposition.CP):
+    '''Method used to run all variations of the scaled down Decomposed AlexNet Model'''  
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)

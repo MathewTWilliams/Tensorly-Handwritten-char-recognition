@@ -56,40 +56,39 @@ EMNIST_MAPPING_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent,
 UPDATED_LET_MAPPINGS_PATH = PurePath.joinpath(Path(__file__).resolve().parent.parent,
                                 "Dataset/updated-letter-mappings.txt").as_posix()
 
-
+# File Path to the Tensorflow model results
 TF_RESULTS_FOLDER = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Results/Tensorflow/")
 
+# File Path to the Py-Torch model results
 PYT_RESULTS_FOLDER = PurePath.joinpath(Path(__file__).resolve().parent.parent, 
                         "Results/Py-Torch/")
 
+
+# Other import constants
 PIXEL_SIDE_LENGTH = 28
-
 LABEL_COL = 0
-
 PYT_INPUT_SIZE = (1, PIXEL_SIDE_LENGTH, PIXEL_SIDE_LENGTH)
-
 BATCH_SIZE = 32
-
 N_EPOCHS = 50
-
 N_NUM_CLASSES = 10
 N_LET_CLASSES = 37
 N_BAL_CLASSES = N_NUM_CLASSES + N_LET_CLASSES
-
 VALIDATE = True
 
-
+# Decomposition Enumeration
 class Decomposition(Enum): 
     CP = 0
     Tucker = 1
 
-def get_decomp_name(decomposition): 
+def get_decomp_name(decomposition):
+    """Method used to extract the decomposition name from an instance of the above Enumeration""" 
     return str(decomposition).split(".")[-1]
 
-
 def estimate_tucker_ranks(layer, backend="pytorch"): 
-    
+    '''Using EVBMF, estimate the rank of the tensor for Tucker Decomposition. 
+    2 rank estimations are done as we want to produce 2 projection matrices, 
+    one with matrization across the first dimension and another across the 2nd dimension. Both ranks are returned'''
     tl.set_backend(backend)
 
     weights = None
@@ -109,7 +108,9 @@ def estimate_tucker_ranks(layer, backend="pytorch"):
 
 
 def estimate_cp_rank(layer, backend="pytorch"): 
-    
+    '''Using EVBMF, estimate the rank of the tensor for CP Decomposition. 
+    2 rank estimations are done, one with matrization across the first dimension and 
+    another across the 2nd dimension. The largest of the 2 ranks is returned'''
     tl.set_backend(backend)
 
     weights = None
@@ -122,12 +123,10 @@ def estimate_cp_rank(layer, backend="pytorch"):
 
     unfold_0 = tl.base.unfold(weights,0)
     unfold_1 = tl.base.unfold(weights,1)
-    unfold_2 = tl.base.unfold(weights,2)
-    unfold_3 = tl.base.unfold(weights, 3)
+
     _, diag_0, _, _ = EVBMF(unfold_0)
     _, diag_1, _, _ = EVBMF(unfold_1)
-    _, diag_2, _, _ = EVBMF(unfold_2)
-    _, diag_3, _, _ = EVBMF(unfold_3)
 
-    return max([diag_0.shape[0], diag_1.shape[1], diag_2.shape[2], diag_3.shape[3]])
+
+    return max([diag_0.shape[0], diag_1.shape[1]])
 

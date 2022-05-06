@@ -1,3 +1,6 @@
+# Author: Matt Williams
+# Version: 5/5/2022
+# This is a 'playground' scrip that was used to make visualizations based on result files.
 import matplotlib.pyplot as plt
 from constants import PYT_RESULTS_FOLDER, TF_RESULTS_FOLDER
 from save_results import load_cnn_results
@@ -11,49 +14,54 @@ weighted_avg = "weighted avg"
 precision = "precision"
 recall = "recall"
 f1_score = "f1-score"
-
+num_predictions = "# Predictions"
+prediction_time = "Prediction Time"
+name = "Name"
+dataset = "Dataset"
+back_prop = "Back Propogation Time"
 
 
 
 
 if __name__ == "__main__": 
 
+    pytorch_results = load_cnn_results(PYT_RESULTS_FOLDER)
+    tensorflow_results = load_cnn_results(TF_RESULTS_FOLDER)
+
+    cur_dataset = "Balanced"
+    cur_value = f1_score
+    cur_results = [result for result in tensorflow_results if result[dataset] == cur_dataset]
+
+    #for result in cur_results: 
+        #plt.plot(result[cur_value], label = result[name])
 
 
-    pyt_lenet = load_cnn_results(PYT_RESULTS_FOLDER, "results_1.json")
-
-    pyt_alexnet = load_cnn_results(PYT_RESULTS_FOLDER, "results_2.json")
-
-    tf_lenet = load_cnn_results(TF_RESULTS_FOLDER, "results_1.json")
-
-    tf_alexnet = load_cnn_results(TF_RESULTS_FOLDER, "results_2.json")
 
 
-    names = ["PYT LeNet-5", "PYT AlexNet", "Tf LeNet-5", "Tf AlexNet"]
-    values = [
-        pyt_lenet[class_report][weighted_avg][f1_score],
-        pyt_alexnet[class_report][weighted_avg][f1_score], 
-        tf_lenet[class_report][weighted_avg][f1_score],
-        tf_alexnet[class_report][weighted_avg][f1_score]
-    ]
+    values = []
+    names = []
 
-    x_pos = [ i for i,_ in enumerate(names)]
+    for result in cur_results:
+        values.append(result[class_report][weighted_avg][cur_value])
+        names.append(result[name])
+
+    print(names)
+    print(values)
+
+    '''x_pos = [ i for i,_ in enumerate(cur_results)]
 
 
     plt.bar(x_pos, values)
     plt.xticks(x_pos, names)
-    #plt.plot(pyt_lenet[train_loss], label = "Lenet-5 Pytorch Training")
-    #plt.plot(pyt_lenet[valid_loss], label = "Lenet-5 Pytorch Validation")
-    #plt.plot(tf_lenet[train_loss], label = "Lenet-5 Tensorflow Training")
-    #plt.plot(tf_lenet[valid_loss], label = "Lenet-5 Tensorflow Validation")
+
    
 
-    plt.title("Validation F1-Score", fontsize = 15)
+    plt.title("Letters Back Propogation Times", fontsize = 15)
     plt.xlabel("Names", fontsize = 14)
-    plt.ylabel("F1-Score", fontsize=14)
-    ax = plt.gca()
+    plt.ylabel("Back Propogation Time (including validation)", fontsize=14)
+    #ax = plt.gca()
     #ax.yaxis.get_major_locator().set_params(integer = True)
     #ax.xaxis.get_major_locator().set_params(integer = True)
-    plt.ylim(0.85,1)
+    #plt.ylim(0.85,1)
     plt.legend()
-    plt.show()
+    plt.show()'''

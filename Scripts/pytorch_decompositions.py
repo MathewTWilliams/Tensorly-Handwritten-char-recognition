@@ -14,7 +14,8 @@ import warnings
 
 
 def _cp_decomposition_cnn_layer(layer, rank):
-
+    """Given a Conv2D layer and the estimate rank of it's tensor, perform CP decomposition
+        on the given layer and return the new Conv2D layers."""
     tl.set_backend("pytorch")
     # Perform CP decomposition on weight tensor
 
@@ -87,7 +88,8 @@ def _cp_decomposition_cnn_layer(layer, rank):
     return new_layers
 
 def _tucker_decomposition_cnn_layer(layer, ranks):
-
+    """Given a Conv2D layer and the estimate ranks of it's tensor, perform Tucker decomposition
+        on the given layer and return the new Conv2D layers."""
     tl.set_backend("pytorch")
     core, [last,first] = \
         partial_tucker(layer.weight.data, modes = [0,1], rank = ranks, init='random')
@@ -143,19 +145,20 @@ def _tucker_decomposition_cnn_layer(layer, ranks):
 
 
 def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP): 
-    
+    """Given the CNN layers of a model, perform the given decomposition on every Conv2D layer except the first and
+        return the new model.Not touching the first layer allows us to continue using the same Linear Layers."""
     decomposed_cnn_layers = Sequential()
-    #found_first_cnn = False
+    found_first_cnn = False
     for i, module in enumerate(cnn_layers.modules()):
         #Skip first module in the list as it gives overview of sub-modules 
         if i == 0: 
             continue
         
         #Skip first Convolution layer as it only has 1 input channel
-        #if type(module) is torch.nn.Conv2d and not found_first_cnn:
-            #decomposed_cnn_layers.append(module)
-            #found_first_cnn = True
-            #continue 
+        if type(module) is torch.nn.Conv2d and not found_first_cnn:
+            decomposed_cnn_layers.append(module)
+            found_first_cnn = True
+            continue 
         
         elif type(module) is not torch.nn.Conv2d: 
             decomposed_cnn_layers.append(module)

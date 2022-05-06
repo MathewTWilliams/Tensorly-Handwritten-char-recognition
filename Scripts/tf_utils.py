@@ -13,9 +13,12 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import EarlyStopping
 
-#TODO edit method to include infer/run decomposition, compilation, run model method
+
 def run_model(model, train_set_func, valid_set_func, test_set_func, \
     model_name, dataset_name, normalize = True, num_color_channels = 1):
+
+    '''Method used to train the given model on the given dataset information, fit the model and test it. Saves results'''
+
 
     training_hist = None
     train_x, train_y = train_set_func(normalize=normalize, num_color_channels=num_color_channels)
@@ -63,7 +66,9 @@ def run_model(model, train_set_func, valid_set_func, test_set_func, \
     save_cnn_results(results_dict, TF_RESULTS_FOLDER)
 
 
-def compile_model(model): 
+def compile_model(model):
+    """Compile the given model with a Stochastic Gradient Descent optimizer and
+    a Cross Entropy Loss function""" 
     opt = SGD(learning_rate = 0.01, momentum = 0.9)
     model.compile(optimizer = opt, loss = "categorical_crossentropy")
 

@@ -10,6 +10,7 @@ from pytorch_utils import *
 from torchsummary import summary
 
 def _run_numbers():
+    '''Method to run the LeNet-5 model on the numbers dataset.'''
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
 
@@ -26,6 +27,7 @@ def _run_numbers():
     del lenet_numbers
 
 def _run_letters():
+    '''Method to run the LeNet-5 Model on the letters dataset.'''
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -40,6 +42,7 @@ def _run_letters():
     del lenet_letters
 
 def _run_balanced():
+    '''Method to run the LeNet-5 Model on the entire dataset.'''
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -53,7 +56,8 @@ def _run_balanced():
     run_model(lenet_balanced,valid_set_func=load_testing_balanced_dataset, name="LeNet-5 Pytorch", dataset_name="Balanced")
     del lenet_balanced
 
-def run_lenet_pytorch(): 
+def run_lenet_pytorch():
+    '''Method used to run all variations of the LeNet-5 in Py-Torch'''
     _run_numbers()
     _run_letters()
     _run_balanced()
@@ -61,7 +65,7 @@ def run_lenet_pytorch():
 
 
 def _run_numbers_decomposed(decomposition):
-
+    """Given the type of decomposition, run the decomposed LeNet-5 model on the numbers dataset"""
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
 
@@ -80,7 +84,7 @@ def _run_numbers_decomposed(decomposition):
 
 
 def _run_letters_decomposed(decomposition):
-
+    """Given the type of decomposition, run the decomposed LeNet-5 model on the letters dataset"""
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -96,6 +100,7 @@ def _run_letters_decomposed(decomposition):
     del lenet_letters
 
 def _run_balanced_decomposed(decomposition):
+    """Given the type of decomposition, run the decomposed LeNet-5 model on the entire dataset"""
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -111,6 +116,7 @@ def _run_balanced_decomposed(decomposition):
     del lenet_balanced
 
 def run_decomp_lenet_pytorch(decomposition = Decomposition.CP): 
+    '''Given the type of decomposition, run all variations of the Decomposed LeNet-5 in Py-Torch'''
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)
@@ -122,7 +128,7 @@ if __name__ == "__main__":
     #run_lenet_pytorch()
     #run_decomp_lenet_pytorch(Decomposition.CP)
     #run_decomp_lenet_pytorch(Decomposition.Tucker)
-    _run_numbers()
+    _run_numbers_decomposed(Decomposition.Tucker)
 
 
 

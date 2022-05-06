@@ -19,7 +19,8 @@ from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.regularizers import l2
 
 
-def _define_model(num_classes): 
+def _define_model(num_classes):
+    """Defines the tensorflow implementation of the scaled down VGG-11 model"""
     model = Sequential()
     
     #Convolution Layers
@@ -69,6 +70,7 @@ def _define_model(num_classes):
     return model
 
 def _run_letters():
+    """Run the scaled down VGG-11 model on the letters dataset"""
     model = _define_model(N_LET_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
@@ -76,6 +78,7 @@ def _run_letters():
     del model
 
 def _run_numbers():
+    """Run the scaled down VGG-11 model on the numbers dataset"""
     model = _define_model(N_NUM_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
@@ -83,6 +86,7 @@ def _run_numbers():
     del model
 
 def _run_balanced():
+    """Run the scaled down VGG-11 model on the entire dataset"""
     model = _define_model(N_BAL_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
@@ -90,7 +94,8 @@ def _run_balanced():
     del model
 
 
-def run_vgg_11_tf_models(): 
+def run_vgg_11_tf_models():
+    """Run all variations of the scaled down VGG-11 model"""
     _run_numbers()
     _run_letters()
     _run_balanced()
@@ -98,6 +103,7 @@ def run_vgg_11_tf_models():
 
 
 def _run_letters_decomposed(decomposition):
+    """Run the scaled down Decomposede VGG-11 model on the letters dataset"""
     model = _define_model(N_LET_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -107,6 +113,7 @@ def _run_letters_decomposed(decomposition):
     del model
 
 def _run_numbers_decomposed(decomposition):
+    """Run the scaled down Decomposed VGG-11 model on the numbers dataset"""
     model = _define_model(N_NUM_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -116,6 +123,7 @@ def _run_numbers_decomposed(decomposition):
     del model
 
 def _run_balanced_decomposed(decomposition):
+    """Run the scaled down Decomposed VGG-11 model on the entire dataset"""
     model = _define_model(N_BAL_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -125,6 +133,7 @@ def _run_balanced_decomposed(decomposition):
     del model
 
 def run_vgg11_tf_decomposed(decomposition = Decomposition.CP): 
+    """Run all variations of the scaled down Decomposed VGG-11 model."""
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)

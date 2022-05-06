@@ -11,6 +11,7 @@ from torchsummary import summary
 
 
 def _run_numbers():
+    '''Method to run the VGG-11 model on the numbers dataset.'''
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
     
@@ -26,6 +27,7 @@ def _run_numbers():
     del vgg_11_numbers
 
 def _run_letters():
+    '''Method to run the VGG-11 model on the letters dataset.'''
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -40,6 +42,7 @@ def _run_letters():
     del vgg_11_letters
 
 def _run_balanced():
+    '''Method to run the VGG-11 model on the entire dataset.'''
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -55,12 +58,14 @@ def _run_balanced():
 
 
 def run_vgg_11_pytorch(): 
+    '''Method used to run all variations of the VGG-11 model in Py-Torch'''
     _run_numbers()
     _run_letters()
     _run_balanced()
 
 
 def _run_numbers_decomposed(decomposition):
+    '''Given the type of decomposition, run the Decomposed VGG-11 model on the numbers dataset.'''
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
     
@@ -76,6 +81,7 @@ def _run_numbers_decomposed(decomposition):
     del vgg_11_numbers
 
 def _run_letters_decomposed(decomposition):
+    '''Given the type of decomposition, run the Decomposed VGG-11 model on the letters dataset.'''
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -91,6 +97,7 @@ def _run_letters_decomposed(decomposition):
     del vgg_11_letters
 
 def _run_balanced_decomposed(decomposition):
+    '''Given the type of decomposition, run the Decomposed VGG-11 model on the entire dataset.'''
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -106,6 +113,7 @@ def _run_balanced_decomposed(decomposition):
     del vgg_11_balanced
 
 def run_decomp_vgg11_pytorch(decomposition = Decomposition.CP): 
+    '''Given the type of decomposition,to run all variations of the Decomposed VGG-11 model in Py-Torch'''
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)
@@ -113,8 +121,8 @@ def run_decomp_vgg11_pytorch(decomposition = Decomposition.CP):
 if __name__ == "__main__": 
     
     run_vgg_11_pytorch()
-    run_decomp_vgg11_pytorch(Decomposition.CP)
-    run_decomp_vgg11_pytorch(Decomposition.Tucker)
+    #run_decomp_vgg11_pytorch(Decomposition.CP)
+    #run_decomp_vgg11_pytorch(Decomposition.Tucker)
 
     
     

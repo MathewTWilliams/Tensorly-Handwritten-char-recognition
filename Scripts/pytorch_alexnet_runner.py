@@ -11,6 +11,7 @@ from torchsummary import summary
 
 
 def _run_numbers():
+    """Run the Py-Torch Implementation of the scaled down AlexNet model on the numbers dataset"""
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
     
@@ -25,6 +26,7 @@ def _run_numbers():
     del alex_numbers
 
 def _run_letters():
+    """Run the Py-Torch Implementation of the scaled down AlexNet model on the letters dataset"""
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -39,6 +41,7 @@ def _run_letters():
     del alex_letters
 
 def _run_balanced():
+    """Run the Py-Torch Implementation of the scaled down AlexNet model on the entire dataset"""
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -54,12 +57,14 @@ def _run_balanced():
 
 
 def run_alexnet_pytorch():
+    '''Method used to run all variations of the scaled down AlexNet Model in Py-Torch''' 
     _run_numbers() 
     _run_letters()
     _run_balanced()
 
 
-def _run_numbers_decomposed(decomposition): 
+def _run_numbers_decomposed(decomposition):
+    """Given the type of decomposition, run the Py-Torch Implementation of the scaled down Decomposed AlexNet model on the numbers dataset"""
     num_data_loaders = make_data_loaders(load_training_number_dataset, 
                                         load_validation_number_dataset)
     
@@ -75,6 +80,7 @@ def _run_numbers_decomposed(decomposition):
     del alex_numbers
 
 def _run_letters_decomposed(decomposition):
+    """Given the type of decomposition, run the Py-Torch Implementation of the scaled down Decomposed AlexNet model on the letters dataset"""
     let_data_loaders = make_data_loaders(load_training_letter_dataset, 
                                         load_validation_letter_dataset)
 
@@ -90,6 +96,7 @@ def _run_letters_decomposed(decomposition):
     del alex_letters
 
 def _run_balanced_decomposed(decomposition): 
+    """Given the type of decomposition, run the Py-Torch Implementation of the scaled down Decomposed AlexNet model on the entire dataset"""
     bal_data_loaders = make_data_loaders(load_training_balanced_dataset, 
                                         load_validation_balanced_dataset)
 
@@ -104,7 +111,8 @@ def _run_balanced_decomposed(decomposition):
     run_model(alex_balanced,valid_set_func=load_testing_balanced_dataset, name=name, dataset_name="Balanced")
     del alex_balanced
 
-def run_decomp_alexnet_pytorch(decomposition = Decomposition.CP): 
+def run_decomp_alexnet_pytorch(decomposition = Decomposition.CP):
+    '''Given the type of decomposition, run all variations of the decomposed scaled down AlexNet Model''' 
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)

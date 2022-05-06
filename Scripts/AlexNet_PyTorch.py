@@ -12,7 +12,7 @@ from pytorch_decompositions import decompose_cnn_layers
 from constants import Decomposition
 
 class AlexNet(Py_Torch_Base):
-
+    """Pytorch implementation of a scaled down AlexNet."""
     def __init__(self, loaders, num_classes): 
         super(AlexNet, self).__init__(loaders, num_classes)
 
@@ -54,6 +54,7 @@ class AlexNet(Py_Torch_Base):
         return cnn_layers
 
     def _define_linear_layers(self):
+        '''Defines the Linear Layers of the Model'''
         linear_1 = Linear(576, out_features=256)
         initialize_weights_bias(linear_1)
 
@@ -83,15 +84,17 @@ class AlexNet(Py_Torch_Base):
 
 
     def _define_optimizer(self):
+        '''Defines the Optimizer of the Model.'''
         return SGD(self.parameters(), lr = 0.01, momentum=0.9)
 
 
     def _define_loss_function(self):
+        """Defines the loss function of the model"""
         return CrossEntropyLoss()
 
 
 class AlexNet_Decomposed(AlexNet): 
-
+    """A subclass of the above AlexNet Class, but returns decomposed CNN layers."""
     def __init__(self, loaders, num_classes, decomposition = Decomposition.CP):
         self._decomposition = decomposition 
         super(AlexNet_Decomposed, self).__init__(loaders, num_classes)
@@ -99,3 +102,4 @@ class AlexNet_Decomposed(AlexNet):
     def _define_cnn_layers(self):
         org_cnn_layers = super(AlexNet_Decomposed,self)._define_cnn_layers()
         return decompose_cnn_layers(org_cnn_layers, self._decomposition)
+

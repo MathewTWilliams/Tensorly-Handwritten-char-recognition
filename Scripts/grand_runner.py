@@ -1,4 +1,5 @@
-
+# Author: Matt Williams
+# Version: 5/5/2022
 from pytorch_alexnet_runner import run_alexnet_pytorch, run_decomp_alexnet_pytorch
 from pytorch_lenet_runner import run_lenet_pytorch, run_decomp_lenet_pytorch
 from pytorch_vgg11_runner import run_vgg_11_pytorch, run_decomp_vgg11_pytorch
@@ -9,28 +10,28 @@ from constants import Decomposition
 
 
 if __name__ == "__main__":
+    '''Main method used to run all models from both libraries across all decomposition and data set combinations.'''
+    #run_lenet_pytorch()
+    #run_decomp_lenet_pytorch(Decomposition.CP)
+    #run_decomp_lenet_pytorch(Decomposition.Tucker)
 
-    run_lenet_pytorch()
-    run_decomp_lenet_pytorch(Decomposition.CP)
-    run_decomp_lenet_pytorch(Decomposition.Tucker)
-
-    run_alexnet_pytorch()
+    #run_alexnet_pytorch()
     run_decomp_alexnet_pytorch(Decomposition.CP)
-    run_decomp_alexnet_pytorch(Decomposition.Tucker)
+    #run_decomp_alexnet_pytorch(Decomposition.Tucker)
 
     #run_vgg_11_pytorch()
     #run_decomp_vgg11_pytorch(Decomposition.CP)
     #run_decomp_vgg11_pytorch(Decomposition.Tucker)
 
 
-    run_lenet_tf_models()
+    #run_lenet_tf_models()
     #run_lenet_tf_decomposed(Decomposition.CP)
-    run_lenet_tf_decomposed(Decomposition.Tucker)
+    #run_lenet_tf_decomposed(Decomposition.Tucker)
 
-    run_alexnet_tf_models()
+    #run_alexnet_tf_models()
     #run_alexnet_tf_decomposed(Decomposition.CP)
     #run_alexnet_tf_decomposed(Decomposition.Tucker)
 
-    run_vgg_11_tf_models()
+    #run_vgg_11_tf_models()
     #run_vgg11_tf_decomposed(Decomposition.CP)
     #run_vgg11_tf_decomposed(Decomposition.Tucker)

@@ -13,7 +13,8 @@ from tensorflow.keras.models import Sequential
 
 
 def _cp_decomposition_cnn_layer(layer, rank): 
-
+    '''Given a Conv2D layer and an estimated ranked, perform CP decomposition on the given
+        layer and return the new Conv2D layers. CURRENTLY NOT WORKING'''
     tl.set_backend("tensorflow")
 
     org_weights_bias_list = layer.get_weights()
@@ -111,7 +112,9 @@ def _cp_decomposition_cnn_layer(layer, rank):
             padding_layer_2, depthwise_vertical_layer, pointwise_r_to_t_layer]
 
 
-def _tucker_decompositon_cnn_layer(layer, ranks): 
+def _tucker_decompositon_cnn_layer(layer, ranks):
+    '''Given a Conv2D layer and a list of estimated ranks, perform Tucker decomposition on the given
+        layer and return the new Conv2D layers. CURRENTLY BUGGED''' 
     tl.set_backend("tensorflow")
 
 
@@ -190,16 +193,19 @@ def _tucker_decompositon_cnn_layer(layer, ranks):
 
 
 def decompose_cnn_layers(cnn_layers, decomposition = Decomposition.CP):
-
+    """Given the CNN layers of a tensorflow model, perform the given decompositon on each of the 
+    Conv2D layers except the first and return the new model. except the first.
+    Not touching the first layer allows us to continue using the same Linear Layers."""
+    
     count = 0
     decomposed_model = Sequential()
-    #found_first_cnn = False
+    found_first_cnn = False
     for i, layer in enumerate(cnn_layers.layers): 
 
-        #if type(layer) is Conv2D and not found_first_cnn: 
-            #decomposed_model.add(layer)
-            #found_first_cnn = True
-            #continue
+        if type(layer) is Conv2D and not found_first_cnn: 
+            decomposed_model.add(layer)
+            found_first_cnn = True
+            continue
 
         if type(layer) is not Conv2D:
             decomposed_model.add(layer)

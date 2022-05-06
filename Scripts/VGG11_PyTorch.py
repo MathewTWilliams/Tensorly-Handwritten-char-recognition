@@ -14,12 +14,13 @@ from constants import Decomposition
 
 
 class VGG11(Py_Torch_Base): 
-
+    """Defines the Py-Torch implementation of the scaled Down VGG-11 model"""
     def __init__(self, loaders, num_classes): 
         super(VGG11, self).__init__(loaders, num_classes)
 
 
     def _define_cnn_layers(self):
+        """Defines the CNN layers of the model"""
         conv_1 = Conv2d(in_channels=1, out_channels=32, kernel_size= 3, padding = 1, stride = 1) 
         initialize_weights_bias(conv_1)
 
@@ -72,6 +73,7 @@ class VGG11(Py_Torch_Base):
         return cnn_layers
 
     def _define_linear_layers(self):
+        """Defines the Linear layers of the model"""
         linear_1 = Linear(in_features=256, out_features=128)
         initialize_weights_bias(linear_1)
         
@@ -99,14 +101,16 @@ class VGG11(Py_Torch_Base):
         return linear_layers
 
     def _define_loss_function(self):
+        """Defines the loss function of the model"""
         return CrossEntropyLoss()
 
     def _define_optimizer(self):
+        """Defines the optimizer for the model."""
         return SGD(self.parameters(), lr = 0.01, momentum = 0.9, weight_decay= 5e-4)
 
 
 class VGG11_Decomposed(VGG11): 
-
+    """A subclass of the above scaled down VGG-11 Class, but returns decomposed CNN layers."""
     def __init__(self, loaders, num_classes, decomposition = Decomposition.CP): 
         self._decomposition = decomposition
         super(VGG11_Decomposed, self).__init__(loaders, num_classes)

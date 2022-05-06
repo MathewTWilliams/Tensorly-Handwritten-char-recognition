@@ -21,6 +21,7 @@ from tensorflow.keras.optimizers import SGD
 
 
 def _define_model(num_classes): 
+    '''Defines the Tensorflow Implementation of LeNet-5'''
     model = Sequential()
     #CNN specific layers
     model.add(Conv2D(filters = 6, kernel_size = (5,5), activation = "tanh", kernel_initializer ='glorot_normal', input_shape = (28,28,1), padding = "same", strides = 1))
@@ -37,6 +38,7 @@ def _define_model(num_classes):
     return model
 
 def _run_letters():
+    '''Method to run the LeNet-5 Model on the letters dataset.'''
     model = _define_model(N_LET_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_letter_dataset, load_validation_letter_dataset, 
@@ -44,6 +46,7 @@ def _run_letters():
     del model
     
 def _run_numbers():
+    '''Method to run the LeNet-5 Model on the numbers dataset.'''
     model = _define_model(N_NUM_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_number_dataset, load_validation_number_dataset, 
@@ -51,19 +54,22 @@ def _run_numbers():
     del model
 
 def _run_balanced():
+    '''Method to run the LeNet-5 Model on the entire dataset.'''
     model = _define_model(N_BAL_CLASSES)
     model = compile_model(model)
     run_model(model, load_training_balanced_dataset, load_validation_balanced_dataset, 
             load_testing_balanced_dataset, "Lenet-5 TF", "Balanced")
     del model
     
-def run_lenet_tf_models(): 
+def run_lenet_tf_models():
+    '''Method used to run all variations of the regular LeNet-5 Model'''  
     _run_numbers()
     _run_letters()
     _run_balanced()
 
 
 def _run_letters_decomposed(decomposition):
+    '''Method to run the Decomposed LeNet-5 Model on the Letters dataset.'''
     model = _define_model(N_LET_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -73,6 +79,7 @@ def _run_letters_decomposed(decomposition):
     del model
 
 def _run_numbers_decomposed(decomposition):
+    '''Given the type of decomposition, run the Decomposed LeNet-5 Model on the numbers dataset.'''
     model = _define_model(N_NUM_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -82,6 +89,7 @@ def _run_numbers_decomposed(decomposition):
     del model
 
 def _run_balanced_decomposed(decomposition):
+    '''Given the type of decomposition, run the Decomposed LeNet-5 Model on the entire dataset.'''
     model = _define_model(N_BAL_CLASSES)
     model = decompose_cnn_layers(model, decomposition)
     model = compile_model(model)
@@ -90,7 +98,8 @@ def _run_balanced_decomposed(decomposition):
             load_testing_balanced_dataset, name, "Balanced")
     del model
 
-def run_lenet_tf_decomposed(decomposition = Decomposition.CP): 
+def run_lenet_tf_decomposed(decomposition = Decomposition.CP):
+    '''Given the type of decomposition, run all variations of the Decomposed LeNet-5 Model'''  
     _run_numbers_decomposed(decomposition)
     _run_letters_decomposed(decomposition)
     _run_balanced_decomposed(decomposition)
@@ -102,5 +111,5 @@ if __name__ == "__main__":
     #run_lenet_tf_decomposed(Decomposition.CP)
     #run_lenet_tf_decomposed(Decomposition.Tucker)
 
-    _run_numbers_decomposed(Decomposition.CP)
+    _run_numbers_decomposed(Decomposition.Tucker)
     #_run_numbers()

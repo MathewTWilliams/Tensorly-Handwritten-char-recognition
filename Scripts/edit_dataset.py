@@ -6,6 +6,7 @@ import pandas as pd
 from save_load_dataset import read_mappings
 
 
+
 def _split_data_set(data_set): 
     '''Split the given data set based on if the label is a number or a letter'''
     dataset_groups = data_set.groupby(data_set.columns[0])
@@ -41,6 +42,7 @@ def _train_valid_split(train_set, n):
     
 
 def _make_updated_letter_mappings(): 
+    '''Makes a new class mapping file for the standalone letters dataset'''
     mappings = read_mappings(EMNIST_MAPPING_PATH)
 
     updated_letter_mappings = []
@@ -59,6 +61,8 @@ def _make_updated_letter_mappings():
 
 def _update_letter_labels(letters_df, updated_letter_mappings):
 
+    '''Given a data frame of the letters dataset and the updated letter mappings,
+        update the letter class labels with their new mappings.'''
     for updated_label, _ in updated_letter_mappings:
         old_label = updated_label + N_NUM_CLASSES
         letters_df[LABEL_COL] = letters_df[LABEL_COL].replace(old_label, updated_label)
@@ -67,6 +71,7 @@ def _update_letter_labels(letters_df, updated_letter_mappings):
 
 if __name__ == "__main__": 
 
+    """Main method to edit the dataset into its final state"""
     # make updated letter mapping dictionary
     updated_letter_mappings = _make_updated_letter_mappings()
 
