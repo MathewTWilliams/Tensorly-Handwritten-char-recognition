@@ -16,6 +16,7 @@ from datetime import date, datetime
 from sklearn.metrics import classification_report
 import numpy as np
 from save_results import save_cnn_results 
+import torch.nn.functional as F
 
 class Py_Torch_Base(Module):
     """Base class for all Py-Torch models"""

@@ -15,7 +15,6 @@ from pytorch_utils import Py_Torch_Base, initialize_weights_bias
 from pytorch_decompositions import decompose_cnn_layers
 from constants import Decomposition
 
-
 class LeNet_5(Py_Torch_Base):
     """Pytorch implementation of LeNet-5."""
 
